@@ -89,7 +89,6 @@ class Server extends EventEmitter {
 		player.netId = this.getPlayerId()
 		player.udpKey = this.getPlayerKey()
 		this.players.push(player)
-		// console.log(player.netId, player.udpKey)
 	}
 
 	removePlayer(player) {
@@ -120,15 +119,12 @@ class Server extends EventEmitter {
 			PASSWORD: "0",
 			MODDED: "1" // no touch
 		}
-		// console.log(qs.stringify(form))
 		const API = `https://serverapi.celaria.com/${apiVersion}/register.php`
 		axios.post(API, qs.stringify(form)).catch(() => { })
 	}
 
 	start() {
 		this.tcpServer = net.createServer((socket) => { // TCP Handler
-			// 'connection' listener.
-			// console.log('client connected')
 			const player = new Player(socket) // This player isn't added to any World until it has been validated
 			player.cServer = this
 			socket.setNoDelay(true)
@@ -136,7 +132,6 @@ class Server extends EventEmitter {
 				return socket.destroy()
 			})
 			socket.once('close', () => {
-				// console.log('client disconnected')
 				if (player.world) {
 					this.emit("playerLeave", player)
 				}
@@ -248,7 +243,6 @@ class Server extends EventEmitter {
 					default: // Consider kicking players?
 						break
 				}
-				//console.log({ playerId, packetId, playerKey })
 			} catch (error) {
 				console.warn("Error caused by UDP packet handler:", error)
 			}

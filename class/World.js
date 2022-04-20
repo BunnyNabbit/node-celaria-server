@@ -78,7 +78,6 @@ class World extends EventEmitter {
 		this.broadcastExcept(packet, [player], "TCP")
 		this.players.push(player)
 		this.updateLeaderboardEntry(player, 0, 0)
-		// console.log("Players in world:", this.players.length)
 	}
 
 	broadcast(buffer) { // TODO: Needs to implement UDP

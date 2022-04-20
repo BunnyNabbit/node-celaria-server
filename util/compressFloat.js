@@ -5,7 +5,7 @@ function compressFloat(f) {
 	let divide = f / 65535.0
 	let bytes = Math.floor(divide)
 	let diff = f - bytes * 65535
-	bytes += 128;//bring into the 0-255 range	
+	bytes += 128 // bring into the 0-255 range	
 
 	const buff = new SmartBuffer()
 	buff.writeUInt8(bytes)

@@ -4,12 +4,10 @@ function parseCelariaMap(buff) {
 	const map = {}
 	buff = smartbuffer.fromBuffer(buff)
 	const magic = buff.readString(11)
-	// console.log(magic)
 	if (magic === "celaria_map") {
 		map.version = buff.readUInt8() // Version
 
 		map.name = buff.readString(buff.readUInt8())
-		// console.log(map.version, map.name)
 
 		if (map.version == 0) buff.readInt8() // unused byte
 
@@ -84,7 +82,7 @@ function parseCelariaMap(buff) {
 					}
 
 					if (instance.blockType === 5) instance.checkpointId = buff.readUInt8()
-					break;
+					break
 
 				case 1: // Sphere/gem
 					if (map.version <= 1) {
@@ -103,7 +101,7 @@ function parseCelariaMap(buff) {
 							z: buff.readDoubleLE()
 						}
 					}
-					break;
+					break
 				case 2: // Player spawn
 					buff.readUInt8() // unused byte
 
@@ -129,7 +127,7 @@ function parseCelariaMap(buff) {
 						y: 0,
 						z: buff.readFloatLE()
 					}
-					break;
+					break
 
 				case 3: // Barrier (wall)
 					buff.readUInt8() // unused byte
@@ -165,7 +163,7 @@ function parseCelariaMap(buff) {
 						y: 0,
 						z: buff.readFloatLE()
 					}
-					break;
+					break
 				case 4: // Barrier (floor)
 					buff.readUInt8() // unused byte
 
@@ -200,9 +198,8 @@ function parseCelariaMap(buff) {
 						y: 0,
 						z: buff.readFloatLE()
 					}
-					break;
+					break
 				case 128: // Special
-					// throw "Sorry, but the use of dummy objects (Instance ID: 128) isn't supported by ecmapLib.js. Come bug me if this error comes to you."
 					var id = buff.readUInt8()
 
 					if (map.version <= 1) {
@@ -224,10 +221,10 @@ function parseCelariaMap(buff) {
 					}
 
 					var rotation = buff.readFloatLE()
-					break;
+					break
 
 				default:
-					break;
+					break
 			}
 			map.instances.push(instance)
 		}
@@ -284,7 +281,7 @@ function writeCelariaMap(map, version = 3) {
 
 	// write data
 	map.instances.forEach(instance => {
-		if (!instanceTypeIsSupported(instance.instanceType, version)) return;
+		if (!instanceTypeIsSupported(instance.instanceType, version)) return
 		output.writeUInt8(instance.instanceType)
 		switch (instance.instanceType) {
 			case 0: // block

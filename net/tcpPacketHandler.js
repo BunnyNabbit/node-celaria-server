@@ -26,8 +26,6 @@ function tcpPacketHandler(socket, player, buff) {
 
 					serverInfoBuff.writeUInt8(10) // UDP refresh rate for client
 					socket.write(serverInfoBuff.transformPacket("TCP"))
-
-					console.log({ gameVersion, onlineMode })
 					break
 				case 3: // Player information
 					if (player.world) return player.kick("Player information can't be sent twice", 9)
@@ -98,7 +96,6 @@ function tcpPacketHandler(socket, player, buff) {
 					if (type == 1) offset = 0 // Post-game leaderboard
 					const length = buff.readUInt8()
 					const showOwnEntry = buff.readUInt8()
-					player.cServer.messageAll(`Type:${type}, Offset:${offset}, Length:${length}, myOwn:${showOwnEntry}`)
 					if (player.world) {
 						const entriesInView = player.world.leaderboard.slice(offset, offset + length)
 						const leaderboardBuffer = new Packet(120, "TCP")
@@ -132,7 +129,6 @@ function tcpPacketHandler(socket, player, buff) {
 							writeEntry(entry)
 						})
 						if (containsOwnEntry)  writeEntry(ownEntry, player.world.leaderboard.findIndex(entry => entry.player === player) + 1)
-						console.log(player.world.leaderboard)
 						socket.write(leaderboardBuffer.transformPacket())
 					}
 					break
@@ -202,7 +198,6 @@ function tcpPacketHandler(socket, player, buff) {
 					// if (!player.mapTransmitter) return player.kick("mapTransmitter is missing", 9)
 					// player.mapTransmitter.sendPacket() // Disabled for now since the server sends all packets at once
 					const requestedMapID = buff.readUInt16LE()
-					// console.log({ requestedMapID })
 					break
 				case 10: // "LOL who is thgis mannn". The client tells the server they see a player. Why does this exist?
 					buff.readUInt8() // The other player ID
