@@ -250,9 +250,8 @@ class Player extends EventEmitter {
 		if (this.socket && !this.socket.destroyed) this.socket.destroy()
 	}
 
-	kick(reason, kickReasonID) { // Kick the player and destroy their socket
+	kick(reason, kickReasonID = 0) { // Kick the player and destroy their socket
 		if (this.destroyed) return
-		if (typeof kickReasonID === "undefined") kickReasonID = 0
 
 		const disconnectBuff = new Packet(250)
 		disconnectBuff.writeUInt8(kickReasonID) // https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/connection/TcpPlayerWriter.java#L158

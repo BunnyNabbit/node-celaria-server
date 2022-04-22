@@ -29,6 +29,7 @@ function tcpPacketHandler(socket, player, buff) {
 					break
 				case 3: // Player information
 					if (player.world) return player.kick("Player information can't be sent twice", 9)
+					if (player.cServer.maxPlayers <= player.cServer.getRealPlayers().length) return player.kick("", 2)
 					const usernameLength = buff.readUInt8()
 
 					player.username = ""
