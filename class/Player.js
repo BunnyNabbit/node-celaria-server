@@ -266,7 +266,7 @@ class Player extends EventEmitter {
 		this.destroy()
 	}
 
-	message(message, color = "#ffffff") { // Kick the player and destroy their socket
+	message(message, color = "#ffffff") {
 		if (this.destroyed) return
 		if (!this.socket) return
 	

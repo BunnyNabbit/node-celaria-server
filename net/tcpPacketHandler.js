@@ -15,7 +15,7 @@ function tcpPacketHandler(socket, player, buff) {
 			case 1: // TODO: We don't know what this packet is or called (by name).
 				const gameVersion = buff.readUInt16LE()
 				const onlineMode = buff.readUInt8()
-				if (onlineMode === 0) return player.kick("how?", 10) // ONLINEMODE_REQUIRED
+				if (onlineMode === 0) return player.kick("", 10) // ONLINEMODE_REQUIRED
 
 				// TODO: Check if the information can be resent after the first. Mainly to change the UDP rate.
 				const serverInfoBuff = new Packet(1) // SERVER_INFO https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/player/PlayerProcessor.java#L52

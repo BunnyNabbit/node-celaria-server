@@ -43,8 +43,8 @@ class Server extends EventEmitter {
 		this.port = props.port ?? 6511
 		this.name = props.name || "ncs Server"
 		this.MOTD = {
-			message: [`This server uses node-celaria-server!`, `node-celaria-server is still under active development and is not yet for the public`],
-			color: "#00ffff"
+			message: [`This server proudly uses node-celaria-server!`],
+			color: "#80ffff"
 		}
 		this.sendError = props.sendError ?? false
 		this.statusSendRatelimit = props.statusSendRatelimit ?? 48 // Time in MS before server will accept another status update from a client
