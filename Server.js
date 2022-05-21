@@ -92,7 +92,8 @@ class Server extends EventEmitter {
 	}
 
 	removePlayer(player) {
-		this.players.splice(this.players.indexOf(player), 1)
+		const playerIndex = this.players.indexOf(player)
+		if (playerIndex !== -1) this.players.splice(playerIndex, 1)
 		if (player.world) player.world.removePlayer(player)
 	}
 

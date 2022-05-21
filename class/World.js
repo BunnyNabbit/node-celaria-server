@@ -57,7 +57,7 @@ class World extends EventEmitter {
 
 	removePlayer(player) {
 		const playerIndex = this.players.indexOf(player)
-		if (playerIndex) this.players.splice(playerIndex, 1)
+		if (playerIndex !== -1) this.players.splice(playerIndex, 1)
 		const leaderboardIndex = this.leaderboard.findIndex(entry => entry.player === player)
 		if (leaderboardIndex !== -1) this.leaderboard.splice(leaderboardIndex, 1)
 
