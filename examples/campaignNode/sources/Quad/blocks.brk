@@ -8,15 +8,15 @@ B R I C K  W O R K S H O P  V0.2.0.0
 
 192 -82 0 40 40 90 0.5 0.5 0.5 1
 	+NAME Quad Tower 1
--49 -82 0 40 40 141 1 0 0.02166653 1
-	+NAME Quad Tower 2
+-49 -82 103 40 40 38 1 0 0.02166653 1
+	+NAME Quad Tower 2 Checkpoint
 -49 175 0 40 40 201 1 0 0.02166653 1
-	+NAME Quad Tower 3
+	+NAME Quad Tower 3 Checkpoint
 215 174 0 40 40 260 1 0 0.02166653 1
-	+NAME Quad Tower 4
-71 36 0 40 40 260 0.5 0.5 0.5 1
-	+NAME Quad Tower 5
-10 36 259.5 163 40 14 0.5 0.5 0.5 1
+	+NAME Quad Tower 4 Checkpoint
+71 36 0 40 40 335 0.5 0.5 0.5 1
+	+NAME Quad Tower 5 Goal
+73 -48 243.5 36 205 30 0.5 0.5 0.5 1
 	+NAME New Brick
 -49 135 199 2 40 2 1 1 1 1
 	+NAME New Brick
@@ -28,212 +28,50 @@ B R I C K  W O R K S H O P  V0.2.0.0
 	+NAME New Brick
 -49 135 127 2 2 72 1 1 1 1
 	+NAME New Brick
-71 -45 87 40 3 34 0.5 0.5 0.5 1
-	+NAME Container
-71 -82 84 40 40 3 0.5 0.5 0.5 1
-	+NAME Container
-71 -82 121 40 40 3 0.5 0.5 0.5 1
-	+NAME Container
-71 -82 87 40 3 34 0.5 0.5 0.5 1
-	+NAME Container
-68 -79 102 43 19 3 0.5 0.5 0.5 1
-	+NAME New Brick
-108 -79 105 2 19 16 0 0.1383336 1 1
-	+NAME New Brick
-71 -79 105 2 19 16 0 0.1383336 1 1
-	+NAME New Brick
-86 -77 87 7 9 5 0.0374999 0 0.5 1
+85 -45 20 40 3 34 0.5 0.5 0.5 1
+	+NAME Container [1]
+85 -82 17 40 40 3 0.5 0.5 0.5 1
+	+NAME Container [1]
+85 -82 54 40 40 3 0.5 0.5 0.5 1
+	+NAME Container [1]
+85 -82 20 40 3 34 0.5 0.5 0.5 1
+	+NAME Container [1]
+82 -79 35 43 19 3 0.5 0.5 0.5 1
+	+NAME Container [1]
+122 -79 38 2 19 16 0 0.1383336 1 1
+	+NAME Container [1]
+85 -79 38 2 19 16 0 0.1383336 1 1
+	+NAME Container [1]
+100 -77 20 7 9 5 0.0374999 0 0.5 1
 	+NAME Small Container [2]
 	+ROT -19
-82.16344 -73.97672 87 9 1 6 1 1 1 1
+96.16344 -73.97672 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [2] [1]
 	+ROT -19
-84.05449 -73.32558 87 9 1 6 1 1 1 1
+98.05449 -73.32558 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [2] [2]
 	+ROT -19
-85.94551 -72.67442 87 9 1 6 1 1 1 1
+99.94551 -72.67442 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [2] [3]
 	+ROT -19
-87.83656 -72.02328 87 9 1 6 1 1 1 1
+101.8366 -72.02328 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [2] [4]
 	+ROT -19
-76.96307 -73.46931 87 9 1 6 1 1 1 1
+90.96307 -73.46931 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [1] [4]
 	+ROT -351
-74.98769 -73.15643 87 9 1 6 1 1 1 1
+88.98769 -73.15643 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [1] [3]
 	+ROT -351
-73.01231 -72.84357 87 9 1 6 1 1 1 1
+87.01231 -72.84357 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [1] [2]
 	+ROT -351
-71.03693 -72.53069 87 9 1 6 1 1 1 1
+85.03693 -72.53069 20 9 1 6 1 1 1 1
 	+NAME Container Ridges [1] [1]
 	+ROT -351
-75 -77 87 7 9 5 0.0374999 0 0.5 1
+89 -77 20 7 9 5 0.0374999 0 0.5 1
 	+NAME Small Container [1]
 	+ROT -351
-190 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-190 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-190 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-187 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-187 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-187 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-184 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-184 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-184 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-175 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-175 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-175 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-181 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-178 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-178 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-181 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-178 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-181 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-166 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-166 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-166 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-172 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-169 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-169 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-172 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-169 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-172 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-157 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-157 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-157 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-163 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-160 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-160 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-163 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-160 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-163 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-148 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-148 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-148 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-154 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-151 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-151 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-154 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-151 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-154 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-139 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-139 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-139 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-145 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-142 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-142 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-145 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-142 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-145 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-130 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-130 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-130 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-136 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-133 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-133 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-136 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-133 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-136 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-121 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-121 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-121 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-127 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-124 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-124 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-127 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-124 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-127 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-112 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-112 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-112 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-118 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-115 -82 90 2 36 2 0.5 0.5 0.5 1
-	+NAME test
-115 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-118 -48 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-115 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
-118 -82 0 2 2 90 0.5 0.5 0.5 1
-	+NAME test
 -51 -84 27 285 2 2 0 0.001666784 1 1
 	+NAME Railing
 -51 -84 38 285 2 2 0 0.001666784 1 1
@@ -254,25 +92,71 @@ B R I C K  W O R K S H O P  V0.2.0.0
 	+NAME Railing
 -51 -46 29 2 2 9 1 1 0 1
 	+NAME Railing
-68 -82 102 3 3 25 1 0.965 0 1
-	+NAME New Brick
+82 -82 38 3 3 46 1 0.965 0 1
+	+NAME Container [1]
 96 -256 87 9 7 5 0.0374999 0 0.5 1
-	+NAME asset
+	+NAME Small Container [0]
 97 -257 87 1 9 6 1 1 1 1
-	+NAME asset
+	+NAME Container Ridges [0] [1]
 99 -257 87 1 9 6 1 1 1 1
-	+NAME asset
+	+NAME Container Ridges [0] [2]
 101 -257 87 1 9 6 1 1 1 1
-	+NAME asset
+	+NAME Container Ridges [0] [3]
 103 -257 87 1 9 6 1 1 1 1
-	+NAME asset
-109 -81 124 1 38 2 0.04916668 0 0.5 1
-	+NAME Container
-108 -82 124 3 2 3 0.5 0.5 0.5 1
-	+NAME Container
-108 -45 124 3 3 3 0.5 0.5 0.5 1
-	+NAME Container
-72 -44 124 38 1 2 0.04916668 0 0.5 1
-	+NAME Container
-71 -45 124 2 3 3 0.5 0.5 0.5 1
-	+NAME Container
+	+NAME Container Ridges [0] [4]
+123 -81 57 1 38 2 0.04916668 0 0.5 1
+	+NAME Railing
+122 -82 57 3 2 3 0.5 0.5 0.5 1
+	+NAME Railing
+122 -45 57 3 3 3 0.5 0.5 0.5 1
+	+NAME Railing
+86 -44 57 38 1 2 0.04916668 0 0.5 1
+	+NAME Railing
+85 -45 57 2 3 3 0.5 0.5 0.5 1
+	+NAME Railing
+45 -82 87 2 40 34 0 0.1383336 1 1
+	+NAME Vertical Tower [1]
+44 -82 121 3 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+7 -82 84 3 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+7 -82 87 2 40 34 0 0.1383336 1 1
+	+NAME Vertical Tower [1]
+82 -82 0 3 3 38 0.5 0.5 0.5 1
+	+NAME Container [1]
+7 -82 26 40 40 29 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+7 -82 0 40 40 26 0 0.1383336 1 1
+	+NAME Vertical Tower [1]
+25 -82 84 22 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+44 -82 55 3 3 29 1 0.965 0 1
+	+NAME Vertical Tower [1]
+7 -82 55 3 3 29 1 0.965 0 1
+	+NAME Vertical Tower [1]
+7 -45 55 3 3 29 1 0.965 0 1
+	+NAME Vertical Tower [1]
+44 -45 55 3 3 29 1 0.965 0 1
+	+NAME Vertical Tower [1]
+44 -77 87 1 30 34 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+7 -82 121 15 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+9 -77 87 1 30 34 0.5 0.5 0.5 1
+	+NAME Vertical Tower [1]
+10 -64 101 35 4 5 1 0.965 0 1
+	+NAME Vertical Tower [1]
+-49 -82 0 40 40 103 0.5 0.5 0.5 1
+	+NAME Quad Tower 2
+139 -82 124 40 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [0]
+139 -82 33 40 40 3 0.5 0.5 0.5 1
+	+NAME Vertical Tower [0]
+-49 -42 103 40 36 38 1 0.965 0 1
+	+NAME Speedway
+-49 -6 103 40 10 38 0.02499986 1 0 1
+	+NAME Speedway
+-24 40 157 229 29 28 0.5 0.5 0.5 1
+	+NAME Quad Tower 5 Goal
+156 -82 38 3 3 46 1 0.965 0 1
+	+NAME Vertical Tower [0]
