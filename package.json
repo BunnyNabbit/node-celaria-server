@@ -10,7 +10,7 @@
   "license": "MIT",
   "repository":"github:BunnyNabbit/node-celaria-server",
   "dependencies": {
-    "axios": "^0.23.0",
+    "axios": "^1.6.0",
     "qs": "^6.10.1",
     "smart-buffer": "^4.2.0"
   }
