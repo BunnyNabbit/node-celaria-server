@@ -1,4 +1,4 @@
-![](https://cdn.discordapp.com/attachments/927762440136056855/968355737510223882/spode.png)
+![](https://bunnynabbit.com/images/node-celaria-server-banner.png)
 [![NPM version](https://img.shields.io/npm/v/node-celaria-server.svg)](http://npmjs.com/package/node-celaria-server)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/PDCSteYdDa)
 ------------
