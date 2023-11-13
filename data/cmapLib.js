@@ -230,7 +230,6 @@ function parseCelariaMap(buff) {
 		}
 		return map
 	} else {
-		if (magic === "celaria_map") throw "Map provided was a .cmap. ecmapLib.js does not yet support that file type and it is also highly unlikely that I will add conversion support otherwise."
 		throw "Map provided wasn't a .ecmap"
 	}
 }
