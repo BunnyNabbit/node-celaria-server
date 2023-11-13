@@ -297,31 +297,28 @@ class Server extends EventEmitter {
 
 		let ended = false
 
-		const processExit = async () => {
+		this._processExit = async () => {
+			if (!this.postToMasterServer) return process.exit()
 			const apiVersion = 1
-
 			const form = {
 				PORT: this.port.toString(),
 			}
 			const API = `https://serverapi.celaria.com/${apiVersion}/remove.php`
-			axios.post(API, qs.stringify(form))
 
-			// axios.post(API).then((response) => {
-			// 	console.log("Unlisted server")
-			// 	console.log(response)
-			process.exit()
-			// }, qs.stringify(form))
+			axios.post(API, qs.stringify(form)).then(() => {
+			}).catch(() => {
+				console.warn("Failed to remove server entry")
+			}).finally(() => {
+				process.exit()
+			})
 		}
 
-		process.on("SIGINT", processExit)
-		process.on("SIGTERM", processExit)
-
-		process.on("exit", () => {
-			if (!ended) callback()
-		})
+		process.once("SIGINT", this._processExit)
+		process.once("SIGTERM", this._processExit)
 	}
 
 	shutdown() {
+		this._processExit()
 	}
 }
 
