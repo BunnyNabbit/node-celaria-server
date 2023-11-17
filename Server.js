@@ -240,7 +240,13 @@ class Server extends EventEmitter {
 					case 10: // UDP test packet
 						// Already handled before this and by the UDP test and ping interval
 						break
-
+					case 210: // Measure ping
+						const currentTime = Date.now()
+						const pingId = buff.readUInt8()
+						const difference = currentTime - player.lastPingTime
+						this.ping = Math.min(difference, 999)
+						console.log({ pingId, difference })
+						break
 					default: // Consider kicking players?
 						break
 				}
@@ -265,11 +271,13 @@ class Server extends EventEmitter {
 						this.udpServer.send(testPacketBuff.transformPacket("UDP"), player.udpPort, player.socket.remoteAddress)
 					}
 					// UDP keepalive
+					player.lastPingTime = Date.now()
 					const udpKeepaliveBuff = new Packet(210)
-					udpKeepaliveBuff.writeUInt8(0) // TODO: Ping data https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/connection/BroadcasterUDP.java#L291
-					udpKeepaliveBuff.writeUInt16LE(0)
+					udpKeepaliveBuff.writeUInt8(Math.random() * 255)
+					udpKeepaliveBuff.writeUInt16LE(player.ping)
 					this.udpServer.send(udpKeepaliveBuff.transformPacket("UDP"), player.udpPort, player.socket.remoteAddress)
 				} catch (error) {
+					console.error(error)
 					if (player.cServer.sendError) {
 						player.kick(`node-celaria-server error during keepalive sending#${error.name}: ${error.message}`)
 					} else {

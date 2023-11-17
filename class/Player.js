@@ -21,6 +21,8 @@ class Player extends EventEmitter {
 		this.udpReady = false
 		this.udpPort = null
 		this.lastUpdateNumber = 0
+		this.lastPingTime = Date.now()
+		this.ping = 0
 		this.mapSent = false // TODO: is it actually meaning sent or loaded? Knowing which can be useful for a server
 
 		this.muted = false// not implemented
