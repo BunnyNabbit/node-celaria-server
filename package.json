@@ -6,9 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "BunnyNabbit \"Aon Langton\"",
   "license": "MIT",
-  "repository": "github:BunnyNabbit/node-celaria-server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BunnyNabbit/node-celaria-server.git"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "qs": "^6.10.1",
