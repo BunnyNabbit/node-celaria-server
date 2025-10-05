@@ -1,6 +1,7 @@
 ![node-celaria-server](./graphics/node-celaria-server-banner.webp)
 [![NPM version](https://img.shields.io/npm/v/node-celaria-server.svg)](https://npmjs.com/package/node-celaria-server)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-brightgreen.svg)](https://discord.gg/PDCSteYdDa)
+[![Coverage status](https://coveralls.io/repos/github/BunnyNabbit/node-celaria-server/badge.svg?branch=main)](https://coveralls.io/github/BunnyNabbit/node-celaria-server?branch=main)
 ------------
 
 ## What is this?
