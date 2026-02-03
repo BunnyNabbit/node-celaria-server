@@ -36,7 +36,7 @@ function tcpPacketHandler(socket, player, buff) {
 					player.username += String.fromCharCode(buff.readUInt16LE())
 				}
 
-				// There are a few cases where a player is named PLAYER. I am not exactly sure what causes this name to show up but I would assume it's some sort of placeholder steam name if one couldn't be found. This section detect those usernames and give players a more identifiable username. 
+				// There are a few cases where a player is named PLAYER. I am not exactly sure what causes this name to show up but I would assume it's some sort of placeholder steam name if one couldn't be found. This section detect those usernames and give players a more identifiable username.
 				// Very small list of handpicked adjectives. (adjective-animal)
 				const adjectives = ["Average", "Breezy", "Quick", "Energetic", "Common", "Natural", "Typical", "Stable", "Fellow", "Persistent", "Robust", "Dynamic Typed"]
 				if (player.username === "PLAYER" || player.username === "<Offline>") {
@@ -68,7 +68,7 @@ function tcpPacketHandler(socket, player, buff) {
 				const MOTD = player.cServer.MOTD
 				if (MOTD.message) {
 					if (Array.isArray(MOTD.message)) {
-						MOTD.message.forEach(message => {
+						MOTD.message.forEach((message) => {
 							player.message(message, MOTD.color)
 						})
 					} else {
@@ -102,7 +102,7 @@ function tcpPacketHandler(socket, player, buff) {
 					leaderboardBuffer.writeUInt8(type) // Type of leaderboard (post-game or in-game)
 					leaderboardBuffer.writeUInt8(player.world.leaderboard.length)
 					// Does the leaderboard contain the player's own entry?
-					const ownEntry = player.world.leaderboard.find(entry => entry.player === player)
+					const ownEntry = player.world.leaderboard.find((entry) => entry.player === player)
 					const containsOwnEntry = Number(Boolean(ownEntry))
 					leaderboardBuffer.writeUInt8(entriesInView.length + containsOwnEntry) // Number of entries found in the current view
 					leaderboardBuffer.writeUInt8(containsOwnEntry)
@@ -113,7 +113,8 @@ function tcpPacketHandler(socket, player, buff) {
 						leaderboardBuffer.writeUInt8(placement)
 						leaderboardBuffer.writeUInt8(entry.player.netId)
 						leaderboardBuffer.writeUInt8(entry.player.username.length)
-						for (let i = 0; i < entry.player.username.length; i++) { // I feel like this might have a problem. Usually all other ways of writing strings use UInt16LE
+						for (let i = 0; i < entry.player.username.length; i++) {
+							// I feel like this might have a problem. Usually all other ways of writing strings use UInt16LE
 							leaderboardBuffer.writeUInt8(entry.player.username.charCodeAt(i))
 						}
 						leaderboardBuffer.writeUInt8(entry.player.profile.badgeId)
@@ -125,10 +126,10 @@ function tcpPacketHandler(socket, player, buff) {
 							leaderboardBuffer.writeUInt8(0)
 						}
 					}
-					entriesInView.forEach(entry => {
+					entriesInView.forEach((entry) => {
 						writeEntry(entry)
 					})
-					if (containsOwnEntry) writeEntry(ownEntry, player.world.leaderboard.findIndex(entry => entry.player === player) + 1)
+					if (containsOwnEntry) writeEntry(ownEntry, player.world.leaderboard.findIndex((entry) => entry.player === player) + 1)
 					socket.write(leaderboardBuffer.transformPacket())
 				}
 				break
@@ -141,7 +142,7 @@ function tcpPacketHandler(socket, player, buff) {
 				const words = message.split(" ")
 				const firstWord = words[0]
 				let commandIssued = false
-				player.cServer.commands.forEach(cmd => {
+				player.cServer.commands.forEach((cmd) => {
 					if (Array.isArray(cmd.name)) {
 						if (cmd.name.includes(firstWord)) {
 							cmd.callback(player, words.slice(1, words.length).join(""))
@@ -165,7 +166,7 @@ function tcpPacketHandler(socket, player, buff) {
 					player._chatCooldown = null
 				}, 2000)
 
-				const showId = player.cServer.players.some(other => other !== player && other.username === player.username)
+				const showId = player.cServer.players.some((other) => other !== player && other.username === player.username)
 				// const showId = player.cServer.players.some(other => other.socket && other !== player && other.username === player.username)
 				if (message.length) {
 					let adornments = ""

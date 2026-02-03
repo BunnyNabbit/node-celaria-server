@@ -1,4 +1,5 @@
 class Vector3 {
+	/**/
 	constructor(x = 0, y = 0, z = 0) {
 		this.x = x
 		this.y = y
@@ -13,10 +14,7 @@ class Vector3 {
 	}
 
 	equalsVector(vector) {
-		if (this.x === vector.x &&
-			this.y === vector.y &&
-			this.z === vector.z)
-			return true
+		if (this.x === vector.x && this.y === vector.y && this.z === vector.z) return true
 	}
 
 	addVector(vector) {

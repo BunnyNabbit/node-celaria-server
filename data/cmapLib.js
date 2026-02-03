@@ -22,7 +22,7 @@ function parseCelariaMap(buff) {
 				platin: buff.readUInt32LE(),
 				gold: buff.readUInt32LE(),
 				silver: buff.readUInt32LE(),
-				bronze: buff.readUInt32LE()
+				bronze: buff.readUInt32LE(),
 			})
 		}
 
@@ -53,32 +53,32 @@ function parseCelariaMap(buff) {
 						instance.position = {
 							x: buff.readInt32LE() / 10,
 							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10
+							z: buff.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
 							x: buff.readUInt32LE() / 10,
 							y: buff.readUInt32LE() / 10,
-							z: buff.readUInt32LE() / 10
+							z: buff.readUInt32LE() / 10,
 						}
 					} else {
 						instance.position = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 
 						instance.scale = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE()
+						z: buff.readFloatLE(),
 					}
 
 					if (instance.blockType === 5) instance.checkpointId = buff.readUInt8()
@@ -98,7 +98,7 @@ function parseCelariaMap(buff) {
 						instance.position = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 					}
 					break
@@ -118,14 +118,14 @@ function parseCelariaMap(buff) {
 						instance.position = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE()
+						z: buff.readFloatLE(),
 					}
 					break
 
@@ -136,32 +136,32 @@ function parseCelariaMap(buff) {
 						instance.position = {
 							x: buff.readInt32LE() / 10,
 							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10
+							z: buff.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
 							x: buff.readUInt32LE() / 10,
 							y: 0,
-							z: buff.readUInt32LE() / 10
+							z: buff.readUInt32LE() / 10,
 						}
 					} else {
 						instance.position = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 
 						instance.scale = {
 							x: buff.readDoubleLE(),
 							y: 0,
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE()
+						z: buff.readFloatLE(),
 					}
 					break
 				case 4: // Barrier (floor)
@@ -171,32 +171,32 @@ function parseCelariaMap(buff) {
 						instance.position = {
 							x: buff.readInt32LE() / 10,
 							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10
+							z: buff.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
 							x: buff.readUInt32LE() / 10,
 							y: buff.readUInt32LE() / 10,
-							z: 0
+							z: 0,
 						}
 					} else {
 						instance.position = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE()
+							z: buff.readDoubleLE(),
 						}
 
 						instance.scale = {
 							x: buff.readDoubleLE(),
 							y: buff.readDoubleLE(),
-							z: 0
+							z: 0,
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE()
+						z: buff.readFloatLE(),
 					}
 					break
 				case 128: // Special
@@ -237,11 +237,14 @@ function parseCelariaMap(buff) {
 // TODO: Many of the map data to write should be optional and have default values for everything to "just work" if the map alone has no checkpoint data, sun or name and just the map blocks.
 function writeCelariaMap(map, version = 3) {
 	// this can modify the original object
-	if (!map.instances) map.instances = [{
-		instanceType: 2,
-		position: { x: 0, y: 0, z: 0 },
-		rotation: { z: 0 }
-	}]
+	if (!map.instances)
+		map.instances = [
+			{
+				instanceType: 2,
+				position: { x: 0, y: 0, z: 0 },
+				rotation: { z: 0 },
+			},
+		]
 
 	output = new smartbuffer()
 	output.writeString("celaria_map")
@@ -255,7 +258,7 @@ function writeCelariaMap(map, version = 3) {
 	if (version == 0) output.writeUInt8(0) // unused byte
 	output.writeUInt8(1) // Mode byte: Must be 1 for Celaria server (Java) to work. Otherwise doesn't matter
 
-	const numCheckpoints = map.instances.filter(instance => instance.instanceType === 0 && (instance.blockType === 5 || instance.blockType === 1)).length
+	const numCheckpoints = map.instances.filter((instance) => instance.instanceType === 0 && (instance.blockType === 5 || instance.blockType === 1)).length
 	output.writeUInt8(numCheckpoints)
 	for (let i = 0; i < numCheckpoints; i++) {
 		// Purposefully have impossible to beat times for maps written by cmapLib.js
@@ -279,7 +282,7 @@ function writeCelariaMap(map, version = 3) {
 	output.writeUInt32LE(map.instances.length)
 
 	// write data
-	map.instances.forEach(instance => {
+	map.instances.forEach((instance) => {
 		if (!instanceTypeIsSupported(instance.instanceType, version)) return
 		output.writeUInt8(instance.instanceType)
 		switch (instance.instanceType) {
@@ -394,7 +397,6 @@ function writeCelariaMap(map, version = 3) {
 
 	return output.toBuffer()
 }
-
 
 // TODO: Again, this uses the .ecmap versions (0 - 4)
 function instanceTypeIsSupported(instanceType, version) {

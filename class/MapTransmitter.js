@@ -5,24 +5,27 @@ const Packet = require("./Packet.js")
 const PacketFragmentLength = 4096
 
 class MapTransmitter extends EventEmitter {
+	/**/
 	constructor(player) {
 		super()
 		this.player = player
 		this.mapDataBuffer = new SmartBuffer()
 	}
 
-	setMapData(buff) { // Set the current map buffer
+	setMapData(buff) {
+		// Set the current map buffer
 		this.mapDataBuffer = SmartBuffer.fromBuffer(buff)
 	}
 
-	sendAllPackets() { // Disregard waiting for the client! SEND ALL THA PACKETS!!
-		while (this.sendPacket() == false) { }
+	sendAllPackets() {
+		// Disregard waiting for the client! SEND ALL THA PACKETS!!
+		while (this.sendPacket() == false) {}
 	}
 
 	sendPacket() {
 		if (this.mapDataBuffer.remaining() === 0) {
 			// There are no more map fragments to be sent
-			const lastFragmentBuff = new Packet(5) // LAST_MAP_DATA_PACKET 
+			const lastFragmentBuff = new Packet(5) // LAST_MAP_DATA_PACKET
 			this.player.socket.write(lastFragmentBuff.transformPacket("TCP"))
 			return true
 		}

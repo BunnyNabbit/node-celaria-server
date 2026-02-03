@@ -7,6 +7,5 @@
 // + The map order can be seen by using a command
 
 module.exports = (server) => {
-	server.on("playerJoin", (player) => {
-	})
+	server.on("playerJoin", (player) => {})
 }
