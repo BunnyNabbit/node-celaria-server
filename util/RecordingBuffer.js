@@ -9,6 +9,7 @@ function sleep(ms) {
 }
 
 class Recording {
+	/**/
 	constructor(data) {
 		this.player = null
 		this.recording = false
@@ -18,9 +19,11 @@ class Recording {
 		this.statusCallback = null
 		this.lastStatus = new Date()
 
-		if (!data.username) { // Serialized data
+		if (!data.username) {
+			// Serialized data
 			this.data = SmartBuffer.fromBuffer(data)
-		} else { // A player
+		} else {
+			// A player
 			this.data = new SmartBuffer({ size: 100000 })
 			this.player = data
 			this.data.writeUInt8(0) // Data version
@@ -52,6 +55,7 @@ class Recording {
 			this.data.writeDoubleLE(new Date() - 0)
 		}
 	}
+
 	startRecordingPlayer() {
 		if (!this.player) throw "Can't start recording without player attached"
 		this.recording = true
@@ -60,12 +64,14 @@ class Recording {
 		}
 		this.player.on("statusUpdate", this.statusCallback)
 	}
+
 	stopRecordingPlayer() {
 		if (!this.player) throw "Can't stop recording without player attached"
 		this.recording = false
 		this.player.off("statusUpdate", this.statusCallback)
 		return this.data.toBuffer()
 	}
+
 	startPlayback(world) {
 		this.data.readOffset = 0
 		const bot = new Player(null)
@@ -97,7 +103,7 @@ class Recording {
 
 			if (!bot.destroyed) {
 				resolve(true)
-				bot.destroy()				
+				bot.destroy()
 			} else {
 				resolve(false)
 			}
@@ -106,6 +112,7 @@ class Recording {
 
 		return playbackFinished
 	}
+
 	async readTic(handleDelay, bot) {
 		const delay = this.data.readFloatLE()
 		const status = {}
@@ -116,9 +123,9 @@ class Recording {
 		status.y = this.data.readFloatLE()
 		status.z = this.data.readFloatLE()
 
-		status.nx = ((this.data.readUInt8() / 255) * 2) - 1
-		status.ny = ((this.data.readUInt8() / 255) * 2) - 1
-		status.nz = ((this.data.readUInt8() / 255) * 2) - 1
+		status.nx = (this.data.readUInt8() / 255) * 2 - 1
+		status.ny = (this.data.readUInt8() / 255) * 2 - 1
+		status.nz = (this.data.readUInt8() / 255) * 2 - 1
 
 		status.nLen = (this.data.readUInt8() / 255) * 3
 
@@ -139,6 +146,7 @@ class Recording {
 		}
 		return status
 	}
+
 	addTic(status) {
 		this.data.writeFloatLE(-(this.lastStatus - new Date()))
 		this.lastStatus = new Date()
@@ -153,7 +161,7 @@ class Recording {
 
 		// normalize movement vector/direction
 		const len = Math.sqrt(status.movX * status.movX + status.movY * status.movY + status.movZ * status.movZ)
-		let mX, mY, mZ;
+		let mX, mY, mZ
 		if (len > 0.001) {
 			//normalize
 			mX = status.movX / len
@@ -166,11 +174,11 @@ class Recording {
 		}
 
 		// Write normal (This is the direction that Mov(XYZ) contines for smooth movment)
-		this.data.writeUInt8(((mX + 1.0) / 2.0) * 255)
-		this.data.writeUInt8(((mY + 1.0) / 2.0) * 255)
-		this.data.writeUInt8(((mZ + 1.0) / 2.0) * 255)
+		this.data.writeUInt8(((mX + 1) / 2) * 255)
+		this.data.writeUInt8(((mY + 1) / 2) * 255)
+		this.data.writeUInt8(((mZ + 1) / 2) * 255)
 		// write vecotr length (what)
-		this.data.writeUInt8((len / 6.0) * 255)
+		this.data.writeUInt8((len / 6) * 255)
 		// OK (good)
 		this.data.writeUInt8(((status.rotationZ % 360) / 360) * 255)
 		this.data.writeUInt8(status.animationID)

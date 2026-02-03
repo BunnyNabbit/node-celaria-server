@@ -13,6 +13,7 @@ function characterAllowed(charId) {
 }
 
 class Player extends EventEmitter {
+	/**/
 	constructor(socket) {
 		super()
 		this.socket = socket // null means player is fake/bot and shouldn't be sent packets to or count towards the server list.
@@ -23,7 +24,7 @@ class Player extends EventEmitter {
 		this.lastUpdateNumber = 0
 		this.mapSent = false // TODO: is it actually meaning sent or loaded? Knowing which can be useful for a server
 
-		this.muted = false// not implemented
+		this.muted = false // not implemented
 		this.chatColor = "#ffffff"
 
 		this.destroyed = false
@@ -38,13 +39,13 @@ class Player extends EventEmitter {
 			colors: {
 				visor: "#ffff00",
 				armor: "#ffffff",
-				skin: "#c0c0c0"
-			}
+				skin: "#c0c0c0",
+			},
 		}
 
 		this.profile = {
 			experience: 0,
-			badgeId: 0
+			badgeId: 0,
 		}
 
 		this.animationLocked = false // Should server update the animation IDs sent by the client?
@@ -80,7 +81,8 @@ class Player extends EventEmitter {
 		this.lastStatusSend = new Date()
 	}
 
-	refresh() { // "Refresh" the player to all other connected clients to receive changes by faking disconnections and reconnections. This is mainly used to change player or bot ego
+	refresh() {
+		// "Refresh" the player to all other connected clients to receive changes by faking disconnections and reconnections. This is mainly used to change player or bot ego
 	}
 
 	roundEnd() {
@@ -107,7 +109,7 @@ class Player extends EventEmitter {
 		this.mapTransmitter = new MapTransmitter(this)
 		this.mapTransmitter.setMapData(mapBuffer)
 		this.mapTransmitter.sendAllPackets() // Special function to ignore waiting for the client. might cause problems but whatever, the maps are usually small
-		// Now that the client has loaded the map, 
+		// Now that the client has loaded the map,
 		const startGameBuff = new Packet(183) // ROUND_START https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/player/PlayerProcessor.java#L301
 		startGameBuff.writeUInt32LE(timer.timeLeft / 10) // Number of tics until round ends. The Celaria client ticks 100 times a second.
 		this.socket.write(startGameBuff.transformPacket("TCP"))
@@ -121,12 +123,13 @@ class Player extends EventEmitter {
 
 		const username = this.username
 		playerCreateBuff.writeUInt8(username.length)
-		for (let i = 0; i < username.length; i++) { // Write UInt16 for each character
+		for (let i = 0; i < username.length; i++) {
+			// Write UInt16 for each character
 			playerCreateBuff.writeUInt16LE(username.charCodeAt(i))
 		}
 
 		// Avatar
-		
+
 		// Character
 		playerCreateBuff.writeUInt8(this.avatar.character) // 0: Default 1: Runner 2: Collector
 
@@ -166,7 +169,7 @@ class Player extends EventEmitter {
 
 		// normalize movement vector/direction
 		const len = Math.sqrt(this.rawStatus.movX * this.rawStatus.movX + this.rawStatus.movY * this.rawStatus.movY + this.rawStatus.movZ * this.rawStatus.movZ)
-		let mX, mY, mZ;
+		let mX, mY, mZ
 		if (len > 0.001) {
 			//normalize
 			mX = this.rawStatus.movX / len
@@ -179,11 +182,11 @@ class Player extends EventEmitter {
 		}
 
 		// Write normal (This is the direction that Mov(XYZ) contines for smooth movment)
-		statusUpdatePacket.writeUInt8(((mX + 1.0) / 2.0) * 255)
-		statusUpdatePacket.writeUInt8(((mY + 1.0) / 2.0) * 255)
-		statusUpdatePacket.writeUInt8(((mZ + 1.0) / 2.0) * 255)
+		statusUpdatePacket.writeUInt8(((mX + 1) / 2) * 255)
+		statusUpdatePacket.writeUInt8(((mY + 1) / 2) * 255)
+		statusUpdatePacket.writeUInt8(((mZ + 1) / 2) * 255)
 		// write vecotr length (what)
-		statusUpdatePacket.writeUInt8((len / 6.0) * 255)
+		statusUpdatePacket.writeUInt8((len / 6) * 255)
 		// OK (good)
 		statusUpdatePacket.writeUInt8(((this.rawStatus.rotationZ % 360) / 360) * 255)
 		statusUpdatePacket.writeUInt8(this.rawStatus.animationID)
@@ -213,7 +216,7 @@ class Player extends EventEmitter {
 
 		// normalize movement vector/direction
 		const len = Math.sqrt(this.rawStatus.movX * this.rawStatus.movX + this.rawStatus.movY * this.rawStatus.movY + this.rawStatus.movZ * this.rawStatus.movZ)
-		let mX, mY, mZ;
+		let mX, mY, mZ
 		if (len > 0.001) {
 			//normalize
 			mX = this.rawStatus.movX / len
@@ -250,14 +253,16 @@ class Player extends EventEmitter {
 		if (this.socket && !this.socket.destroyed) this.socket.destroy()
 	}
 
-	kick(reason, kickReasonID = 0) { // Kick the player and destroy their socket
+	kick(reason, kickReasonID = 0) {
+		// Kick the player and destroy their socket
 		if (this.destroyed) return
 
 		const disconnectBuff = new Packet(250)
 		disconnectBuff.writeUInt8(kickReasonID) // https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/connection/TcpPlayerWriter.java#L158
 		const kickMsg = reason
 		disconnectBuff.writeUInt16LE(kickMsg.length)
-		for (let i = 0; i < kickMsg.length; i++) { // Write UInt16 for each character in kickMsg
+		for (let i = 0; i < kickMsg.length; i++) {
+			// Write UInt16 for each character in kickMsg
 			disconnectBuff.writeUInt16LE(kickMsg.charCodeAt(i))
 		}
 		disconnectBuff.writeString(kickMsg)
@@ -269,16 +274,17 @@ class Player extends EventEmitter {
 	message(message, color = "#ffffff") {
 		if (this.destroyed) return
 		if (!this.socket) return
-	
-        const rgb = util.color.hexToRGB(color)
-        const messagePacket = new Packet(200) // CHATMESSAGE
-        messagePacket.writeUInt8(rgb[0])
-        messagePacket.writeUInt8(rgb[1])
-        messagePacket.writeUInt8(rgb[2])
-        messagePacket.writeUInt8(message.length)
-        for (let i = 0; i < message.length; i++) { // Write UInt16 for each character in message
-            messagePacket.writeUInt16LE(message.charCodeAt(i))
-        }
+
+		const rgb = util.color.hexToRGB(color)
+		const messagePacket = new Packet(200) // CHATMESSAGE
+		messagePacket.writeUInt8(rgb[0])
+		messagePacket.writeUInt8(rgb[1])
+		messagePacket.writeUInt8(rgb[2])
+		messagePacket.writeUInt8(message.length)
+		for (let i = 0; i < message.length; i++) {
+			// Write UInt16 for each character in message
+			messagePacket.writeUInt16LE(message.charCodeAt(i))
+		}
 
 		this.socket.write(messagePacket.transformPacket("TCP"))
 	}

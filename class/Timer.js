@@ -1,6 +1,7 @@
 const EventEmitter = require("events").EventEmitter
 
 class Timer extends EventEmitter {
+	/**/
 	constructor() {
 		super()
 		this.timeStart = Date.now()

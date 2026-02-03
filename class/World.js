@@ -6,6 +6,7 @@ const cmapLib = require("../data/cmapLib.js")
 const Timer = require("./Timer.js")
 
 class World extends EventEmitter {
+	/**/
 	constructor(server) {
 		super()
 		this.server = server
@@ -15,7 +16,8 @@ class World extends EventEmitter {
 		this.leaderboard = []
 		this.timer = new Timer()
 
-		this.timer.on("extend", (time) => { // Update time
+		this.timer.on("extend", (time) => {
+			// Update time
 			const timeExtendPacket = new Packet(20, "TCP")
 			timeExtendPacket.writeUInt32LE(Math.round(time / 1000))
 			this.broadcast(timeExtendPacket.transformPacket())
@@ -26,7 +28,7 @@ class World extends EventEmitter {
 		if (!player.socket) return
 		const newEntry = { player, time, medal }
 
-		const existingEntry = this.leaderboard.find(entry => entry.player === player)
+		const existingEntry = this.leaderboard.find((entry) => entry.player === player)
 		if (existingEntry) {
 			if (existingEntry.time < newEntry.time) {
 				existingEntry.time = newEntry.time
@@ -35,7 +37,8 @@ class World extends EventEmitter {
 		} else {
 			this.leaderboard.push(newEntry)
 		}
-		function fx(time) { // yep, this is how to sort those entries with no times
+		function fx(time) {
+			// yep, this is how to sort those entries with no times
 			if (time == 0) return Infinity
 			return time
 		}
@@ -44,13 +47,13 @@ class World extends EventEmitter {
 
 	switchMap(mapBuffer) {
 		this.mapBuffer = mapBuffer
-		this.players.forEach(player => {
+		this.players.forEach((player) => {
 			if (player.socket) player.loadMap(mapBuffer, 1)
 		})
 	}
 
 	messageAll(message, color = "#ffffff") {
-		this.players.forEach(player => {
+		this.players.forEach((player) => {
 			if (player.socket) player.message(message, color)
 		})
 	}
@@ -58,7 +61,7 @@ class World extends EventEmitter {
 	removePlayer(player) {
 		const playerIndex = this.players.indexOf(player)
 		if (playerIndex !== -1) this.players.splice(playerIndex, 1)
-		const leaderboardIndex = this.leaderboard.findIndex(entry => entry.player === player)
+		const leaderboardIndex = this.leaderboard.findIndex((entry) => entry.player === player)
 		if (leaderboardIndex !== -1) this.leaderboard.splice(leaderboardIndex, 1)
 
 		// Send player disconnect packet to remove the player on other clients
@@ -70,7 +73,7 @@ class World extends EventEmitter {
 	addPlayer(player) {
 		player.world = this
 		if (player.socket) {
-			this.players.forEach(other => {
+			this.players.forEach((other) => {
 				player.socket.write(other.playerCreatePacket())
 			})
 		}
@@ -80,14 +83,15 @@ class World extends EventEmitter {
 		this.updateLeaderboardEntry(player, 0, 0)
 	}
 
-	broadcast(buffer) { // TODO: Needs to implement UDP
-		this.players.forEach(player => {
+	broadcast(buffer) {
+		// TODO: Needs to implement UDP
+		this.players.forEach((player) => {
 			if (player.socket) player.socket.write(buffer)
 		})
 	}
 
 	broadcastExcept(buffer, players, protocol) {
-		this.players.forEach(player => {
+		this.players.forEach((player) => {
 			if (players.includes(player) === false) {
 				if (protocol === "TCP") {
 					if (player.socket) player.socket.write(buffer)

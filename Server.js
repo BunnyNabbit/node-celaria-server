@@ -13,7 +13,7 @@ const Packet = require("./class/Packet.js")
 
 const tcpPacketHandler = require("./net/tcpPacketHandler.js")
 
-const net = require('net')
+const net = require("net")
 const dgram = require("dgram")
 
 const util = require("./util/index.js")
@@ -27,6 +27,7 @@ function animationAllowed(animId) {
 }
 
 class Server extends EventEmitter {
+	/**/
 	constructor(props) {
 		super()
 		this.worlds = [new World(this)]
@@ -44,7 +45,7 @@ class Server extends EventEmitter {
 		this.name = props.name || "ncs Server"
 		this.MOTD = {
 			message: [`This server proudly uses node-celaria-server!`],
-			color: "#80ffff"
+			color: "#80ffff",
 		}
 		this.sendError = props.sendError ?? false
 		this.statusSendRatelimit = props.statusSendRatelimit ?? 48 // Time in MS before server will accept another status update from a client
@@ -52,36 +53,41 @@ class Server extends EventEmitter {
 		this.useDefault = props.useDefault ?? true // If enabled, the rounds system will be active
 		this.postToMasterServer = props.postToMasterServer ?? true
 
-		if (!props.disableFunctions) this.functions = {
-			World,
-			Player,
-			Packet,
-			cmapLib,
-			Recording,
-			util
-		}
+		if (!props.disableFunctions)
+			this.functions = {
+				World,
+				Player,
+				Packet,
+				cmapLib,
+				Recording,
+				util,
+			}
 	}
 
 	// Send a message to all players in the server
+
+	// Send a message to all players in the server
 	messageAll(message, color = "#ffffff") {
-		this.players.forEach(player => {
+		this.players.forEach((player) => {
 			if (player.socket) player.message(message, color)
 		})
 	}
 
 	getPlayerKey() {
 		let key = randomIntFromInterval(0, 65535)
-		if (this.players.some(player => player.udpKey == key) == false) return key
+		if (this.players.some((player) => player.udpKey == key) == false) return key
 		return this.getPlayerKey()
 	}
+
 	getPlayerId() {
 		for (let i = 0; i < 256; i++) {
-			if (!this.players.some(player => player.netId == i)) return i
+			if (!this.players.some((player) => player.netId == i)) return i
 		}
 		throw "Unable to generate unique player ID"
 	}
+
 	getRealPlayers() {
-		return this.players.filter(player => player.socket)
+		return this.players.filter((player) => player.socket)
 	}
 
 	newPlayer(player) {
@@ -118,43 +124,45 @@ class Server extends EventEmitter {
 
 			VERSION: "4", // Protocol version
 			PASSWORD: "0",
-			MODDED: "1" // no touch
+			MODDED: "1", // no touch
 		}
 		const API = `https://serverapi.celaria.com/${apiVersion}/register.php`
-		axios.post(API, qs.stringify(form)).catch(() => { })
+		axios.post(API, qs.stringify(form)).catch(() => {})
 	}
 
 	start() {
-		this.tcpServer = net.createServer((socket) => { // TCP Handler
+		this.tcpServer = net.createServer((socket) => {
+			// TCP Handler
 			const player = new Player(socket) // This player isn't added to any World until it has been validated
 			player.cServer = this
 			socket.setNoDelay(true)
 			socket.on("error", () => {
 				return socket.destroy()
 			})
-			socket.once('close', () => {
+			socket.once("close", () => {
 				if (player.world) {
 					this.emit("playerLeave", player)
 				}
 				player.destroy()
 			})
-			socket.on('data', (data) => {
+			socket.on("data", (data) => {
 				tcpPacketHandler(socket, player, SmartBuffer.fromBuffer(data))
 			})
 		})
 
-		this.udpServer = dgram.createSocket({ type: 'udp6' })
+		this.udpServer = dgram.createSocket({ type: "udp6" })
 
 		// TODO: The UDP Handler should be in ithsssss (cying) iownOWN fFILE
 		const UDP_PACKET_HEADER = 1431323459
-		this.udpServer.on('message', (data, rinfo) => { // UDP Handler
+		this.udpServer.on("message", (data, rinfo) => {
+			// UDP Handler
 			try {
 				const buff = SmartBuffer.fromBuffer(data)
 				if (buff.readUInt32LE() !== UDP_PACKET_HEADER) return // Header
 				const playerId = buff.readUInt8()
 				const packetId = buff.readUInt8()
 				const playerKey = buff.readUInt16LE()
-				const player = this.players.find(player => player.udpKey === playerKey) // Find player with the same UDP key
+				const player = this.players.find((player) => player.udpKey === playerKey) // Find player with the same UDP key
 				if (!player) return
 				player.udpPort = rinfo.port
 				switch (packetId) {
@@ -168,9 +176,9 @@ class Server extends EventEmitter {
 							status.y = buff.readFloatLE()
 							status.z = buff.readFloatLE()
 
-							status.nx = ((buff.readUInt8() / 255) * 2) - 1
-							status.ny = ((buff.readUInt8() / 255) * 2) - 1
-							status.nz = ((buff.readUInt8() / 255) * 2) - 1
+							status.nx = (buff.readUInt8() / 255) * 2 - 1
+							status.ny = (buff.readUInt8() / 255) * 2 - 1
+							status.nz = (buff.readUInt8() / 255) * 2 - 1
 
 							status.nLen = (buff.readUInt8() / 255) * 3
 
@@ -216,7 +224,7 @@ class Server extends EventEmitter {
 
 						// funny stuff that original server does
 						let applyRegardless = false
-						if ((status.updateNumber >> 7) != (player.lastUpdateNumber >> 7)) {
+						if (status.updateNumber >> 7 != player.lastUpdateNumber >> 7) {
 							applyRegardless = true
 						}
 
@@ -230,7 +238,8 @@ class Server extends EventEmitter {
 								// Note: In this server, all statuses are sent in their own separate packet. No status updates are ever bundled together in one packet.
 								// This could mean that responses will be faster but may take up more bandwidth due to the packet overheads.
 								// Doing it this way also helps when programming with the functions, as you control when packets are sent.
-								if (-(player.lastStatusSend - new Date()) > this.statusSendRatelimit) { // precaution
+								if (-(player.lastStatusSend - new Date()) > this.statusSendRatelimit) {
+									// precaution
 									player.lastStatusSend = new Date()
 									player.updateStateForOthers()
 								}
@@ -249,13 +258,14 @@ class Server extends EventEmitter {
 			}
 		})
 
-		setInterval(() => { // send keepalives and pings both TCP and UDP. not based on the server tick speed as this server doesn't use such thing.
-			this.players.forEach(player => {
+		setInterval(() => {
+			// send keepalives and pings both TCP and UDP. not based on the server tick speed as this server doesn't use such thing.
+			this.players.forEach((player) => {
 				try {
 					// Player could be a bot (null socket)
 					if (!player.socket) return
 					// TCP keepalive
-					const tcpKeepaliveBuff = new Packet(210) // TCP_STILL_ALIVE 
+					const tcpKeepaliveBuff = new Packet(210) // TCP_STILL_ALIVE
 					player.socket.write(tcpKeepaliveBuff.transformPacket("TCP"))
 					// UDP
 					// Server to client test packet
@@ -279,7 +289,7 @@ class Server extends EventEmitter {
 			})
 		}, 1000)
 
-		this.udpServer.on('listening', () => {
+		this.udpServer.on("listening", () => {
 			const address = this.udpServer.address()
 			console.log(`server listening ${address.address}:${address.port} `)
 		})
@@ -294,7 +304,6 @@ class Server extends EventEmitter {
 			}, 60000)
 		}
 
-
 		let ended = false
 
 		this._processExit = async () => {
@@ -305,12 +314,15 @@ class Server extends EventEmitter {
 			}
 			const API = `https://serverapi.celaria.com/${apiVersion}/remove.php`
 
-			axios.post(API, qs.stringify(form)).then(() => {
-			}).catch(() => {
-				console.warn("Failed to remove server entry")
-			}).finally(() => {
-				process.exit()
-			})
+			axios
+				.post(API, qs.stringify(form))
+				.then(() => {})
+				.catch(() => {
+					console.warn("Failed to remove server entry")
+				})
+				.finally(() => {
+					process.exit()
+				})
 		}
 
 		process.once("SIGINT", this._processExit)

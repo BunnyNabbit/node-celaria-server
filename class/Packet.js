@@ -2,6 +2,7 @@ const { SmartBuffer } = require("smart-buffer")
 
 // SmartBuffer instance with Celaria packet headers
 class Packet extends SmartBuffer {
+	/**/
 	constructor(packetType, protocol) {
 		super()
 		this.packetType = packetType
