@@ -1,20 +1,23 @@
-const SmartBuffer = require("smart-buffer").SmartBuffer
-const Packet = require("../class/Packet.js")
-const { rgbToHex } = require("../util/color.js")
+import { SmartBuffer } from "smart-buffer"
+import { Packet } from "../class/Packet.mts"
+import { rgbToHex } from "../util/color.mts"
+import { constants } from "../data/constants.mts"
+import { Socket } from "node:net"
+import { Player } from "../class/Player.mts"
 
-function characterAllowed(charId) {
-	return [0, 1, 2].includes(charId)
+function characterAllowed(characterId: number) {
+	return constants.validCharactersIds.includes(characterId)
 }
 
-function tcpPacketHandler(socket, player, buff) {
+export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBuffer) {
 	try {
-		if (buff.readString(4) !== "CCPT") return player.kick("Wrong TCP packet header#This shouldn't happen to users connecting to this server with Celaria, if it did then please report this to BunnyNabbit.", 9)
-		const packetId = buff.readUInt8()
-		const packetSize = buff.readUInt16LE()
+		if (buffer.readString(4) !== "CCPT") return player.kick("Wrong TCP packet header#This shouldn't happen to users connecting to this server with Celaria, if it did then please report this to BunnyNabbit.", 9)
+		const packetId = buffer.readUInt8()
+		const packetSize = buffer.readUInt16LE()
 		switch (packetId) {
 			case 1: // TODO: We don't know what this packet is or called (by name).
-				const gameVersion = buff.readUInt16LE()
-				const onlineMode = buff.readUInt8()
+				const gameVersion = buffer.readUInt16LE()
+				const onlineMode = buffer.readUInt8()
 				if (onlineMode === 0) return player.kick("", 10) // ONLINEMODE_REQUIRED
 
 				// TODO: Check if the information can be resent after the first. Mainly to change the UDP rate.
@@ -29,11 +32,11 @@ function tcpPacketHandler(socket, player, buff) {
 			case 3: // Player information
 				if (player.world) return player.kick("Player information can't be sent twice", 9)
 				if (player.cServer.maxPlayers <= player.cServer.getRealPlayers().length) return player.kick("", 2)
-				const usernameLength = buff.readUInt8()
+				const usernameLength = buffer.readUInt8()
 
 				player.username = ""
 				for (let i = 0; i < usernameLength; i++) {
-					player.username += String.fromCharCode(buff.readUInt16LE())
+					player.username += String.fromCharCode(buffer.readUInt16LE())
 				}
 
 				// There are a few cases where a player is named PLAYER. I am not exactly sure what causes this name to show up but I would assume it's some sort of placeholder steam name if one couldn't be found. This section detect those usernames and give players a more identifiable username.
@@ -45,13 +48,13 @@ function tcpPacketHandler(socket, player, buff) {
 				}
 
 				// This information seems easy to spoof. Not a reliable way to find WIW
-				player.steamId = buff.readBigUInt64LE().toString()
+				player.steamId = buffer.readBigUInt64LE().toString()
 
-				player.avatar.character = buff.readUInt8()
+				player.avatar.character = buffer.readUInt8()
 				if (characterAllowed(player.avatar.character) === false) return player.kick("Invalid character ID", 9) // Allowing invalid characters would cause other clients to crash. Not good.
-				player.avatar.colors.skin = rgbToHex(buff.readUInt8(), buff.readUInt8(), buff.readUInt8())
-				player.avatar.colors.armor = rgbToHex(buff.readUInt8(), buff.readUInt8(), buff.readUInt8())
-				player.avatar.colors.visor = rgbToHex(buff.readUInt8(), buff.readUInt8(), buff.readUInt8())
+				player.avatar.colors.skin = rgbToHex(buffer.readUInt8(), buffer.readUInt8(), buffer.readUInt8())
+				player.avatar.colors.armor = rgbToHex(buffer.readUInt8(), buffer.readUInt8(), buffer.readUInt8())
+				player.avatar.colors.visor = rgbToHex(buffer.readUInt8(), buffer.readUInt8(), buffer.readUInt8())
 
 				player.cServer.newPlayer(player) // Put netId and udpKey into player and put him into the server array
 
@@ -79,8 +82,8 @@ function tcpPacketHandler(socket, player, buff) {
 				break
 			case 4: // Player ranking status update https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/player/PlayerProcessor.java#L704
 				const oldProfile = JSON.parse(JSON.stringify(player.profile))
-				player.profile.experience = buff.readUInt32LE()
-				player.profile.badgeId = buff.readUInt8()
+				player.profile.experience = buffer.readUInt32LE()
+				player.profile.badgeId = buffer.readUInt8()
 				const newProfile = player.profile
 
 				player.emit("updateRank", newProfile, oldProfile)
@@ -91,11 +94,11 @@ function tcpPacketHandler(socket, player, buff) {
 				player.emit("mapReceived")
 				break
 			case 120: // Leaderboard request https://github.com/DevLewa/Celaria-Server/blob/207b73745931561e292aeb458e24805c00640861/src/server/player/PlayerProcessor.java#L727
-				const type = buff.readUInt8()
-				let offset = buff.readUInt8()
+				const type = buffer.readUInt8()
+				let offset = buffer.readUInt8()
 				if (type == 1) offset = 0 // Post-game leaderboard
-				const length = buff.readUInt8()
-				const showOwnEntry = buff.readUInt8()
+				const length = buffer.readUInt8()
+				const showOwnEntry = buffer.readUInt8()
 				if (player.world) {
 					const entriesInView = player.world.leaderboard.slice(offset, offset + length)
 					const leaderboardBuffer = new Packet(120, "TCP")
@@ -107,7 +110,7 @@ function tcpPacketHandler(socket, player, buff) {
 					leaderboardBuffer.writeUInt8(entriesInView.length + containsOwnEntry) // Number of entries found in the current view
 					leaderboardBuffer.writeUInt8(containsOwnEntry)
 					let newPlace = 0
-					function writeEntry(entry, placement) {
+					function writeEntry(entry, placement?) {
 						newPlace++
 						if (!placement) placement = newPlace
 						leaderboardBuffer.writeUInt8(placement)
@@ -135,7 +138,7 @@ function tcpPacketHandler(socket, player, buff) {
 				break
 			case 200: // Chat
 				// TODO: Make this robust. It should be possible to replace the chat handler and add in filtering.
-				const message = buff.readString(packetSize).substring(0, 85).trim()
+				const message = buffer.readString(packetSize).substring(0, 85).trim()
 				if (!player.world) break
 
 				// Handle commands
@@ -182,11 +185,11 @@ function tcpPacketHandler(socket, player, buff) {
 				break
 			case 202: // Activate checkpoint
 				if (!player.world) return player.kick("Foul checkpoint activation", 9)
-				player.emit("checkpoint", buff.readUInt32LE())
+				player.emit("checkpoint", buffer.readUInt32LE())
 				break
 			case 203: // Reach goal
 				if (!player.world) return player.kick("Foul goal activation", 9)
-				player.emit("goal", buff.readUInt32LE())
+				player.emit("goal", buffer.readUInt32LE())
 				break
 			case 210: // TCP keepalive (no extra data)
 				break
@@ -198,10 +201,10 @@ function tcpPacketHandler(socket, player, buff) {
 			case 199: // MapTransmitter: Client request for next fragment (Ignored by sending all packets to the client)
 				// if (!player.mapTransmitter) return player.kick("mapTransmitter is missing", 9)
 				// player.mapTransmitter.sendPacket() // Disabled for now since the server sends all packets at once
-				const requestedMapID = buff.readUInt16LE()
+				const requestedMapID = buffer.readUInt16LE()
 				break
 			case 10: // "LOL who is thgis mannn". The client tells the server they see a player. Why does this exist?
-				buff.readUInt8() // The other player ID
+				buffer.readUInt8() // The other player ID
 				// TODO: Is it actually used? And for what purpose would it even be used for? WHy?
 				break
 			default:
@@ -209,7 +212,7 @@ function tcpPacketHandler(socket, player, buff) {
 		}
 		// console.log({ packetId, packetSize, remainingBytes: buff.remaining() })
 		// Not the best way but the packets are small so it doesn't quite matter. i think
-		if (buff.remaining()) tcpPacketHandler(socket, player, buff)
+		if (buffer.remaining()) tcpPacketHandler(socket, player, buffer)
 	} catch (error) {
 		console.error(error)
 		if (player.cServer.sendError) {
@@ -220,8 +223,8 @@ function tcpPacketHandler(socket, player, buff) {
 	}
 }
 
-function randomIntFromInterval(min, max) {
+function randomIntFromInterval(min: number, max: number) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-module.exports = tcpPacketHandler
+export default tcpPacketHandler

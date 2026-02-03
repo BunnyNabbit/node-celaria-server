@@ -1,32 +1,46 @@
-const EventEmitter = require("events").EventEmitter
+import { EventEmitter } from "events"
+import { World } from "./class/World.mts"
+import { Player } from "./class/Player.mts"
+import * as cmapLib from "./data/cmapLib.mts"
+import { Recording } from "./class/Recording.mts"
+import qs from "qs"
+import axios from "axios"
+import { SmartBuffer } from "smart-buffer"
+import { Packet } from "./class/Packet.mts"
+import { tcpPacketHandler } from "./net/tcpPacketHandler.mts"
+import net from "net"
+import dgram from "dgram"
+import { util } from "./util/index.mts"
 
-const World = require("./class/World.js")
-const Player = require("./class/Player.js")
-const cmapLib = require("./data/cmapLib.js")
-const Recording = require("./class/Recording.js")
-
-const qs = require("qs")
-const axios = require("axios")
-
-const SmartBuffer = require("smart-buffer").SmartBuffer
-const Packet = require("./class/Packet.js")
-
-const tcpPacketHandler = require("./net/tcpPacketHandler.js")
-
-const net = require("net")
-const dgram = require("dgram")
-
-const util = require("./util/index.js")
-
-function randomIntFromInterval(min, max) {
+function randomIntFromInterval(min: number, max: number) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function animationAllowed(animId) {
+function animationAllowed(animId: number) {
 	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
 }
 
-class Server extends EventEmitter {
+export class Server extends EventEmitter {
+	worlds: World[]
+	defaultWorld: any
+	commands: any[]
+	maxPlayers: any
+	players: any[]
+	jail: any[]
+	tarpitEnabled: any
+	tarpit: any[]
+	tcpServer: net.Server
+	udpServer: dgram.Socket
+	port: any
+	name: any
+	MOTD: { message: string[]; color: string }
+	sendError: boolean
+	statusSendRatelimit: any
+	mapCollection: any
+	useDefault: any
+	postToMasterServer: boolean
+	functions: any
+	_processExit: () => Promise<never>
 	/**/
 	constructor(props) {
 		super()
@@ -134,6 +148,8 @@ class Server extends EventEmitter {
 		this.tcpServer = net.createServer((socket) => {
 			// TCP Handler
 			const player = new Player(socket) // This player isn't added to any World until it has been validated
+			/** @deprecated Use {@link Player#} */
+			player.cServer = this
 			player.cServer = this
 			socket.setNoDelay(true)
 			socket.on("error", () => {
@@ -167,7 +183,7 @@ class Server extends EventEmitter {
 				player.udpPort = rinfo.port
 				switch (packetId) {
 					case 1: // Player state data (positions, animations, etc)
-						const status = {}
+						const status: any = {}
 						status.updateNumber = buff.readUInt8()
 						status.respawnNumber = buff.readUInt8()
 
@@ -238,6 +254,7 @@ class Server extends EventEmitter {
 								// Note: In this server, all statuses are sent in their own separate packet. No status updates are ever bundled together in one packet.
 								// This could mean that responses will be faster but may take up more bandwidth due to the packet overheads.
 								// Doing it this way also helps when programming with the functions, as you control when packets are sent.
+								// @ts-ignore
 								if (-(player.lastStatusSend - new Date()) > this.statusSendRatelimit) {
 									// precaution
 									player.lastStatusSend = new Date()
@@ -334,6 +351,10 @@ class Server extends EventEmitter {
 	}
 }
 
-const Vector3 = require("./class/Vector3.js")
+export function startServer(props: any) {
+	const server = new Server(props)
+	server.start()
+	return server
+}
 
-module.exports = Server
+export default Server

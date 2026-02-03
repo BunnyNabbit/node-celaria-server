@@ -1,9 +1,10 @@
-const { SmartBuffer } = require("smart-buffer")
-
-// SmartBuffer instance with Celaria packet headers
-class Packet extends SmartBuffer {
-	/**/
-	constructor(packetType, protocol) {
+import { SmartBuffer } from "smart-buffer"
+/** I am a {@link SmartBuffer} wrapper for Celaria packet headers. */
+export class Packet extends SmartBuffer {
+	packetType: number
+	protocol: string
+	/** @todo TypeScript fields for {@link protocol} */
+	constructor(packetType: number, protocol?: string) {
 		super()
 		this.packetType = packetType
 		this.protocol = protocol
@@ -26,4 +27,4 @@ class Packet extends SmartBuffer {
 	}
 }
 
-module.exports = Packet
+export default Packet

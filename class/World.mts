@@ -1,11 +1,17 @@
-const EventEmitter = require("events").EventEmitter
-const Vector3 = require("./Vector3.js")
-const Packet = require("./Packet.js")
-const util = require("../util/index.js")
-const cmapLib = require("../data/cmapLib.js")
-const Timer = require("./Timer.js")
+import { EventEmitter } from "events"
+import { Vector3 } from "./Vector3.mts"
+import { Packet } from "./Packet.mts"
+import { util } from "../util/index.mts"
+import * as cmapLib from "../data/cmapLib.mts"
+import { Timer } from "./Timer.mts"
 
-class World extends EventEmitter {
+export class World extends EventEmitter {
+	server: any
+	players: any[]
+	mapBuffer: Buffer<ArrayBufferLike>
+	map: import("../data/cmapLib.mts").CelariaMap
+	leaderboard: any[]
+	timer: Timer
 	/**/
 	constructor(server) {
 		super()
@@ -103,4 +109,4 @@ class World extends EventEmitter {
 	}
 }
 
-module.exports = World
+export default World

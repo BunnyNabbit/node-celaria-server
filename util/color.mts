@@ -1,10 +1,9 @@
-// Convert RGB to hex
-function rgbToHex(r, g, b) {
+/** Convert RGB to hex. */
+export function rgbToHex(r: number, g: number, b: number) {
 	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
 }
-
-// Convert hex to RGB
-function hexToRGB(hex) {
+/** Convert hex to RGB. */
+export function hexToRGB(hex: string) {
 	hex = hex.replace(/^#/, "")
 	const bigint = parseInt(hex, 16)
 	const r = (bigint >> 16) & 255
@@ -12,4 +11,3 @@ function hexToRGB(hex) {
 	const b = bigint & 255
 	return [r, g, b]
 }
-module.exports = { rgbToHex, hexToRGB }

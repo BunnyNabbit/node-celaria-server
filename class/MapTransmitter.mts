@@ -1,10 +1,13 @@
-const EventEmitter = require("events").EventEmitter
-const { SmartBuffer } = require("smart-buffer")
-const Packet = require("./Packet.js")
+import { EventEmitter } from "events"
+import { SmartBuffer } from "smart-buffer"
+import { Packet } from "./Packet.mts"
+import { Player } from "./Player.mts"
 
 const PacketFragmentLength = 4096
 
-class MapTransmitter extends EventEmitter {
+export class MapTransmitter extends EventEmitter {
+	player: Player
+	mapDataBuffer: SmartBuffer
 	/**/
 	constructor(player) {
 		super()
@@ -43,4 +46,4 @@ class MapTransmitter extends EventEmitter {
 	}
 }
 
-module.exports = MapTransmitter
+export default MapTransmitter

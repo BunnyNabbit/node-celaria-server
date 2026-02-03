@@ -1,18 +1,34 @@
-const EventEmitter = require("events").EventEmitter
-const Vector3 = require("./Vector3.js")
-const Packet = require("./Packet.js")
-const MapTransmitter = require("./MapTransmitter.js")
-const util = require("../util/index.js")
+import { EventEmitter } from "events"
+import { Packet } from "./Packet.mts"
+import { MapTransmitter } from "./MapTransmitter.mts"
+import { util } from "../util/index.mts"
 
-function animationAllowed(animId) {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
-}
-
-function characterAllowed(charId) {
-	return [0, 1, 2].includes(charId)
-}
-
-class Player extends EventEmitter {
+export class Player extends EventEmitter {
+	cServer: import("../Server.mts").Server
+	world: any
+	socket: any
+	netId: number
+	udpKey: number
+	udpReady: boolean
+	udpPort?: number
+	lastUpdateNumber: number
+	mapSent: boolean
+	muted: boolean
+	chatColor: string
+	destroyed: boolean
+	ready: boolean
+	guest: boolean
+	username: string
+	steamId: string
+	avatar: { character: number; colors: { visor: string; armor: string; skin: string } }
+	profile: { experience: number; badgeId: number }
+	animationLocked: boolean
+	positionLocked: boolean
+	alive: boolean
+	rawStatus: { updateNumber: number; respawnNumber: number; x: number; y: number; z: number; nx: number; ny: number; nz: number; nLen: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number }
+	lastStatusSend: Date
+	mapTransmitter: MapTransmitter
+	_chatCooldown?: true
 	/**/
 	constructor(socket) {
 		super()
@@ -290,4 +306,4 @@ class Player extends EventEmitter {
 	}
 }
 
-module.exports = Player
+export default Player

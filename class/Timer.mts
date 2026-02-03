@@ -1,6 +1,10 @@
-const EventEmitter = require("events").EventEmitter
+import { EventEmitter } from "events"
 
-class Timer extends EventEmitter {
+export class Timer extends EventEmitter {
+	timeStart: number
+	timeEnd: number
+	active: boolean
+	timeout?: NodeJS.Timeout
 	/**/
 	constructor() {
 		super()
@@ -30,17 +34,17 @@ class Timer extends EventEmitter {
 		clearTimeout(this.timeout)
 	}
 
-	extend(ms) {
+	extend(ms: number) {
 		this.timeEnd += ms
-		this.update(ms)
+		this.update()
 		this.emit("extend", ms)
 	}
 
-	set(timeEnd) {
+	set(timeEnd: number) {
 		this.timeStart = Date.now()
 		this.timeEnd = this.timeStart + timeEnd
 		this.update()
 	}
 }
 
-module.exports = Timer
+export default Timer

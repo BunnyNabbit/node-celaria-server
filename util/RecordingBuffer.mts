@@ -1,14 +1,22 @@
-const Player = require("../class/Player.js")
-const { SmartBuffer } = require("smart-buffer")
-const util = require("./index.js")
+import { Player } from "../class/Player.mts"
+import { SmartBuffer } from "smart-buffer"
+import util from "./index.mts"
 
-function sleep(ms) {
+function sleep(ms: number) {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms)
 	})
 }
 
-class Recording {
+export class Recording {
+	player: Player
+	recording: boolean
+	autoAddTics: boolean
+	playback: boolean
+	playbackBot?: Player
+	statusCallback?: (status: any) => void
+	lastStatus: Date
+	data: SmartBuffer
 	/**/
 	constructor(data) {
 		this.player = null
@@ -52,6 +60,7 @@ class Recording {
 			this.data.writeUInt8(visor[2])
 
 			// Start time
+			// @ts-ignore
 			this.data.writeDoubleLE(new Date() - 0)
 		}
 	}
@@ -108,14 +117,16 @@ class Recording {
 				resolve(false)
 			}
 		})
+		// TODO: what
+		// @ts-ignore
 		playbackFinished.bot = bot
 
 		return playbackFinished
 	}
 
-	async readTic(handleDelay, bot) {
+	async readTic(handleDelay: boolean, bot: Player) {
 		const delay = this.data.readFloatLE()
-		const status = {}
+		const status: any = {}
 		status.updateNumber = this.data.readUInt8()
 		status.respawnNumber = this.data.readUInt8()
 
@@ -148,6 +159,7 @@ class Recording {
 	}
 
 	addTic(status) {
+		// @ts-ignore
 		this.data.writeFloatLE(-(this.lastStatus - new Date()))
 		this.lastStatus = new Date()
 
@@ -186,4 +198,4 @@ class Recording {
 	}
 }
 
-module.exports = Recording
+export default Recording

@@ -1,4 +1,4 @@
-const startServer = require("../index.js")
+const { startServer } = require("../index.mts")
 
 describe("index", () => {
 	it("should import", () => {
