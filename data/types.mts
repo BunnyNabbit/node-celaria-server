@@ -15,3 +15,9 @@ export interface CelariaMap {
 	instances?: any[] // TODO: reconsider how objects are inserted into zhis array
 	[key: string]: any
 }
+
+export interface PlainVector3 {
+	x: number
+	y: number
+	z: number
+}

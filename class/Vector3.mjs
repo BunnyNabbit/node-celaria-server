@@ -1,4 +1,6 @@
 // @ts-check
+/** @import {PlainVector3} from "../data/types.mts" */
+
 export class Vector3 {
 	/**/
 	constructor(x = 0, y = 0, z = 0) {
@@ -11,7 +13,7 @@ export class Vector3 {
 	}
 	/**@todo Yet to be documented.
 	 *
-	 * @param {{ x: number; y: number; z: number }} vector
+	 * @param {Vector3 | PlainVector3} vector
 	 */
 	fromVector(vector) {
 		this.x = vector.x
@@ -21,14 +23,14 @@ export class Vector3 {
 	}
 	/**@todo Yet to be documented.
 	 *
-	 * @param {{ x: number; y: number; z: number }} vector
+	 * @param {Vector3 | PlainVector3} vector
 	 */
 	equalsVector(vector) {
 		if (this.x === vector.x && this.y === vector.y && this.z === vector.z) return true
 	}
 	/**@todo Yet to be documented.
 	 *
-	 * @param {{ x: number; y: number; z: number }} vector
+	 * @param {Vector3} vector
 	 */
 	addVector(vector) {
 		this.x += vector.x
@@ -50,7 +52,7 @@ export class Vector3 {
 	}
 	/**@todo Yet to be documented.
 	 *
-	 * @param {{ x: number; y: number; z: number }} vector
+	 * @param {Vector3 | PlainVector3} vector
 	 */
 	subVector(vector) {
 		this.x -= vector.x
@@ -72,7 +74,7 @@ export class Vector3 {
 	}
 	/**@todo Yet to be documented.
 	 *
-	 * @param {{ x: number; y: number; z: number }} vector
+	 * @param {Vector3 | PlainVector3} vector
 	 */
 	multiplyVector(vector) {
 		this.x *= vector.x
