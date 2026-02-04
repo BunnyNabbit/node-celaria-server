@@ -1,15 +1,18 @@
-const Player = require("../class/Player.js")
-const { SmartBuffer } = require("smart-buffer")
-const util = require("./index.js")
+import { Player } from "../class/Player.mjs"
+import { SmartBuffer } from "smart-buffer"
+import util from "./index.mjs"
+/** @import {World} from "../class/World.mjs" */
 
+/**
+ * @param {number} ms
+ */
 function sleep(ms) {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms)
 	})
 }
 
-class Recording {
-	/**/
+export class Recording {
 	constructor(data) {
 		this.player = null
 		this.recording = false
@@ -59,7 +62,7 @@ class Recording {
 	startRecordingPlayer() {
 		if (!this.player) throw "Can't start recording without player attached"
 		this.recording = true
-		this.statusCallback = (status) => {
+		this.statusCallback = (/** @type {any} */ status) => {
 			if (this.autoAddTics) this.addTic(status)
 		}
 		this.player.on("statusUpdate", this.statusCallback)
@@ -72,6 +75,9 @@ class Recording {
 		return this.data.toBuffer()
 	}
 
+	/**@todo Yet to be documented.
+	 * @param {World} world
+	 */
 	startPlayback(world) {
 		this.data.readOffset = 0
 		const bot = new Player(null)
@@ -108,6 +114,7 @@ class Recording {
 				resolve(false)
 			}
 		})
+		// TODO: what
 		playbackFinished.bot = bot
 
 		return playbackFinished
@@ -146,7 +153,9 @@ class Recording {
 		}
 		return status
 	}
-
+	/**@todo Yet to be documented.
+	 * @param {{ updateNumber: number; respawnNumber: number; x: number; y: number; z: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number; }} status
+	 */
 	addTic(status) {
 		this.data.writeFloatLE(-(this.lastStatus - new Date()))
 		this.lastStatus = new Date()
@@ -186,4 +195,4 @@ class Recording {
 	}
 }
 
-module.exports = Recording
+export default Recording

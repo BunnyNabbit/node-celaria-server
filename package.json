@@ -2,10 +2,12 @@
 	"name": "node-celaria-server",
 	"version": "0.0.4",
 	"description": "A Celaria game server",
-	"main": "index.js",
+	"main": "index.mjs",
+	"type": "module",
 	"scripts": {
-		"test": "jest",
-		"build-docs": "typedoc"
+		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+		"build-docs": "typedoc",
+		"type-check": "tsc"
 	},
 	"author": "BunnyNabbit \"Aon Langton\"",
 	"license": "MIT",
@@ -15,18 +17,20 @@
 	},
 	"packageManager": "pnpm@10.28.2+sha512.41872f037ad22f7348e3b1debbaf7e867cfd448f2726d9cf74c08f19507c31d2c8e7a11525b983febc2df640b5438dee6023ebb1f84ed43cc2d654d2bc326264",
 	"dependencies": {
-		"axios": "^1.13.2",
-		"qs": "^6.14.0",
+		"axios": "^1.13.4",
+		"qs": "^6.14.1",
 		"smart-buffer": "^4.2.0"
 	},
 	"devDependencies": {
+		"@types/node": "24.1.0",
+		"cross-env": "^10.1.0",
 		"jest": "^30.2.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-drone-class": "^0.1.0",
 		"prettier-plugin-drone-jsdoc": "^1.8.0",
 		"release-it": "^19.2.4",
 		"release-it-pnpm": "^4.6.6",
-		"typedoc": "^0.28.15",
+		"typedoc": "^0.28.16",
 		"typescript": "^5.9.3"
 	}
 }

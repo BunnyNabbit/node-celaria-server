@@ -1,19 +1,16 @@
-const EventEmitter = require("events").EventEmitter
-const Vector3 = require("./Vector3.js")
-const Packet = require("./Packet.js")
-const MapTransmitter = require("./MapTransmitter.js")
-const util = require("../util/index.js")
+// @ts-check
+import { EventEmitter } from "events"
+import { Packet } from "./Packet.mjs"
+import { MapTransmitter } from "./MapTransmitter.mjs"
+import { util } from "../util/index.mjs"
+/** @import {World} from "./World.mjs" */
+/** @import {Server} from "../Server.mjs" */
 
-function animationAllowed(animId) {
-	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
-}
-
-function characterAllowed(charId) {
-	return [0, 1, 2].includes(charId)
-}
-
-class Player extends EventEmitter {
-	/**/
+export class Player extends EventEmitter {
+	/**@todo Yet to be documented.
+	 *
+	 * @param {any} socket
+	 */
 	constructor(socket) {
 		super()
 		this.socket = socket // null means player is fake/bot and shouldn't be sent packets to or count towards the server list.
@@ -28,6 +25,7 @@ class Player extends EventEmitter {
 		this.chatColor = "#ffffff"
 
 		this.destroyed = false
+		/** @type {World | null} */
 		this.world = null
 		this.ready = false
 
@@ -79,6 +77,8 @@ class Player extends EventEmitter {
 		}
 
 		this.lastStatusSend = new Date()
+		/** @type {Server | null} */
+		this.cServer
 	}
 
 	refresh() {
@@ -89,7 +89,10 @@ class Player extends EventEmitter {
 		const roundEndBuff = new Packet(184) // ROUND_END
 		this.socket.write(roundEndBuff.transformPacket("TCP"))
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer} mapBuffer
+	 */
 	loadMap(mapBuffer, gamemode = 1, timer = this.world.timer) {
 		// Oh. This apparently doesn't work well right now, Celaria really expects rounds to not end right after maps are about to change.
 		// pls fix
@@ -252,7 +255,10 @@ class Player extends EventEmitter {
 		}
 		if (this.socket && !this.socket.destroyed) this.socket.destroy()
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {string} reason
+	 */
 	kick(reason, kickReasonID = 0) {
 		// Kick the player and destroy their socket
 		if (this.destroyed) return
@@ -270,7 +276,10 @@ class Player extends EventEmitter {
 
 		this.destroy()
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {string} message
+	 */
 	message(message, color = "#ffffff") {
 		if (this.destroyed) return
 		if (!this.socket) return
@@ -290,4 +299,4 @@ class Player extends EventEmitter {
 	}
 }
 
-module.exports = Player
+export default Player

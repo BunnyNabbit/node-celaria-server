@@ -1,194 +1,203 @@
-const smartbuffer = require("smart-buffer").SmartBuffer
+// @ts-check
+import { SmartBuffer } from "smart-buffer"
+/** @import {CelariaMap} from "./types.mjs" */
 
-function parseCelariaMap(buff) {
+/**@todo Yet to be documented.
+ *
+ * @param {Buffer} buffer
+ * @returns
+ */
+export function parseCelariaMap(buffer) {
+	/** @type {CelariaMap} */
 	const map = {}
-	buff = smartbuffer.fromBuffer(buff)
-	const magic = buff.readString(11)
+	const smartBuffer = SmartBuffer.fromBuffer(buffer)
+	const magic = smartBuffer.readString(11)
 	if (magic === "celaria_map") {
-		map.version = buff.readUInt8() // Version
+		map.version = smartBuffer.readUInt8() // Version
 
-		map.name = buff.readString(buff.readUInt8())
+		map.name = smartBuffer.readString(smartBuffer.readUInt8())
 
-		if (map.version == 0) buff.readInt8() // unused byte
+		if (map.version == 0) smartBuffer.readInt8() // unused byte
 
-		map.mode = buff.readUInt8() // unused byte (is it really? it's used in validation inside the server code but not client)
+		map.mode = smartBuffer.readUInt8() // unused byte (is it really? it's used in validation inside the server code but not client)
 
-		const numCheckpoints = buff.readInt8()
+		const numCheckpoints = smartBuffer.readInt8()
 
 		map.medalTimes = []
 
 		for (let i = 0; i < numCheckpoints; i++) {
 			map.medalTimes.push({
-				platin: buff.readUInt32LE(),
-				gold: buff.readUInt32LE(),
-				silver: buff.readUInt32LE(),
-				bronze: buff.readUInt32LE(),
+				platin: smartBuffer.readUInt32LE(),
+				gold: smartBuffer.readUInt32LE(),
+				silver: smartBuffer.readUInt32LE(),
+				bronze: smartBuffer.readUInt32LE(),
 			})
 		}
 
-		map.sunRotationHorizontal = buff.readFloatLE()
-		map.sunRotationVertical = buff.readFloatLE()
+		map.sunRotationHorizontal = smartBuffer.readFloatLE()
+		map.sunRotationVertical = smartBuffer.readFloatLE()
 
-		map.previewCamFromX = buff.readDoubleLE()
-		map.previewCamFromY = buff.readDoubleLE()
-		map.previewCamFromZ = buff.readDoubleLE()
+		map.previewCamFromX = smartBuffer.readDoubleLE()
+		map.previewCamFromY = smartBuffer.readDoubleLE()
+		map.previewCamFromZ = smartBuffer.readDoubleLE()
 
-		map.previewCamToX = buff.readDoubleLE()
-		map.previewCamToY = buff.readDoubleLE()
-		map.previewCamToZ = buff.readDoubleLE()
+		map.previewCamToX = smartBuffer.readDoubleLE()
+		map.previewCamToY = smartBuffer.readDoubleLE()
+		map.previewCamToZ = smartBuffer.readDoubleLE()
 
-		const instanceCount = buff.readUInt32LE()
+		const instanceCount = smartBuffer.readUInt32LE()
 
 		map.instances = []
 
-		for (var i = 0; i < instanceCount; i++) {
-			const instance = {}
-			instance.instanceType = buff.readUInt8()
+		for (let i = 0; i < instanceCount; i++) {
+			const instance = {
+				instanceType: smartBuffer.readUInt8(),
+			}
 			switch (instance.instanceType) {
 				case 0: // block
-					instance.blockType = buff.readUInt8()
-					if (map.version == 0) buff.readUInt8() // unused byte
+					instance.blockType = smartBuffer.readUInt8()
+					if (map.version == 0) smartBuffer.readUInt8() // unused byte
 
 					if (map.version <= 1) {
 						instance.position = {
-							x: buff.readInt32LE() / 10,
-							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10,
+							x: smartBuffer.readInt32LE() / 10,
+							y: smartBuffer.readInt32LE() / 10,
+							z: smartBuffer.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
-							x: buff.readUInt32LE() / 10,
-							y: buff.readUInt32LE() / 10,
-							z: buff.readUInt32LE() / 10,
+							x: smartBuffer.readUInt32LE() / 10,
+							y: smartBuffer.readUInt32LE() / 10,
+							z: smartBuffer.readUInt32LE() / 10,
 						}
 					} else {
 						instance.position = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 
 						instance.scale = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE(),
+						z: smartBuffer.readFloatLE(),
 					}
 
-					if (instance.blockType === 5) instance.checkpointId = buff.readUInt8()
+					if (instance.blockType === 5) instance.checkpointId = smartBuffer.readUInt8()
 					break
 
 				case 1: // Sphere/gem
 					if (map.version <= 1) {
 						instance.position = {}
-						instance.position.x = buff.readInt32LE() / 10
-						instance.position.y = buff.readInt32LE() / 10
+						instance.position.x = smartBuffer.readInt32LE() / 10
+						instance.position.y = smartBuffer.readInt32LE() / 10
 						if (map.version == 0) {
-							instance.position.z = buff.readInt32LE() / 10
+							instance.position.z = smartBuffer.readInt32LE() / 10
 						} else {
-							instance.position.z = buff.readUInt32LE() / 10
+							instance.position.z = smartBuffer.readUInt32LE() / 10
 						}
 					} else {
 						instance.position = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 					}
 					break
 				case 2: // Player spawn
-					buff.readUInt8() // unused byte
+					smartBuffer.readUInt8() // unused byte
 
 					if (map.version <= 1) {
 						instance.position = {}
-						instance.position.x = buff.readInt32LE() / 10
-						instance.position.y = buff.readInt32LE() / 10
+						instance.position.x = smartBuffer.readInt32LE() / 10
+						instance.position.y = smartBuffer.readInt32LE() / 10
 						if (map.version == 0) {
-							instance.position.z = buff.readInt32LE() / 10
+							instance.position.z = smartBuffer.readInt32LE() / 10
 						} else {
-							instance.position.z = buff.readUInt32LE() / 10
+							instance.position.z = smartBuffer.readUInt32LE() / 10
 						}
 					} else {
 						instance.position = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE(),
+						z: smartBuffer.readFloatLE(),
 					}
 					break
 
 				case 3: // Barrier (wall)
-					buff.readUInt8() // unused byte
+					smartBuffer.readUInt8() // unused byte
 
 					if (map.version >= 2) {
 						instance.position = {
-							x: buff.readInt32LE() / 10,
-							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10,
+							x: smartBuffer.readInt32LE() / 10,
+							y: smartBuffer.readInt32LE() / 10,
+							z: smartBuffer.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
-							x: buff.readUInt32LE() / 10,
+							x: smartBuffer.readUInt32LE() / 10,
 							y: 0,
-							z: buff.readUInt32LE() / 10,
+							z: smartBuffer.readUInt32LE() / 10,
 						}
 					} else {
 						instance.position = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 
 						instance.scale = {
-							x: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
 							y: 0,
-							z: buff.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 					}
 
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE(),
+						z: smartBuffer.readFloatLE(),
 					}
 					break
 				case 4: // Barrier (floor)
-					buff.readUInt8() // unused byte
+					smartBuffer.readUInt8() // unused byte
 
 					if (map.version >= 2) {
 						instance.position = {
-							x: buff.readInt32LE() / 10,
-							y: buff.readInt32LE() / 10,
-							z: buff.readUInt32LE() / 10,
+							x: smartBuffer.readInt32LE() / 10,
+							y: smartBuffer.readInt32LE() / 10,
+							z: smartBuffer.readUInt32LE() / 10,
 						}
 
 						instance.scale = {
-							x: buff.readUInt32LE() / 10,
-							y: buff.readUInt32LE() / 10,
+							x: smartBuffer.readUInt32LE() / 10,
+							y: smartBuffer.readUInt32LE() / 10,
 							z: 0,
 						}
 					} else {
 						instance.position = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
-							z: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
+							z: smartBuffer.readDoubleLE(),
 						}
 
 						instance.scale = {
-							x: buff.readDoubleLE(),
-							y: buff.readDoubleLE(),
+							x: smartBuffer.readDoubleLE(),
+							y: smartBuffer.readDoubleLE(),
 							z: 0,
 						}
 					}
@@ -196,31 +205,31 @@ function parseCelariaMap(buff) {
 					instance.rotation = {
 						x: 0,
 						y: 0,
-						z: buff.readFloatLE(),
+						z: smartBuffer.readFloatLE(),
 					}
 					break
 				case 128: // Special
-					var id = buff.readUInt8()
+					const id = smartBuffer.readUInt8()
 
 					if (map.version <= 1) {
-						var xPos = buff.readInt32LE()
-						var yPos = buff.readInt32LE()
-						var zPos = buff.readUInt32LE()
+						const xPos = smartBuffer.readInt32LE()
+						const yPos = smartBuffer.readInt32LE()
+						const zPos = smartBuffer.readUInt32LE()
 
-						var xScale = buff.readUInt32LE()
-						var yScale = buff.readUInt32LE()
-						var zScale = buff.readUInt32LE()
+						const xScale = smartBuffer.readUInt32LE()
+						const yScale = smartBuffer.readUInt32LE()
+						const zScale = smartBuffer.readUInt32LE()
 					} else {
-						var xPos = buff.readDoubleLE()
-						var yPos = buff.readDoubleLE()
-						var zPos = buff.readDoubleLE()
+						const xPos = smartBuffer.readDoubleLE()
+						const yPos = smartBuffer.readDoubleLE()
+						const zPos = smartBuffer.readDoubleLE()
 
-						var xScale = buff.readDoubleLE()
-						var yScale = buff.readDoubleLE()
-						var zScale = buff.readDoubleLE()
+						const xScale = smartBuffer.readDoubleLE()
+						const yScale = smartBuffer.readDoubleLE()
+						const zScale = smartBuffer.readDoubleLE()
 					}
 
-					var rotation = buff.readFloatLE()
+					const rotation = smartBuffer.readFloatLE()
 					break
 
 				default:
@@ -235,7 +244,11 @@ function parseCelariaMap(buff) {
 }
 
 // TODO: Many of the map data to write should be optional and have default values for everything to "just work" if the map alone has no checkpoint data, sun or name and just the map blocks.
-function writeCelariaMap(map, version = 3) {
+/**@todo Yet to be documented.
+ *
+ * @param {CelariaMap} map
+ */
+export function writeCelariaMap(map, version = 3) {
 	// this can modify the original object
 	if (!map.instances)
 		map.instances = [
@@ -246,7 +259,7 @@ function writeCelariaMap(map, version = 3) {
 			},
 		]
 
-	output = new smartbuffer()
+	const output = new SmartBuffer()
 	output.writeString("celaria_map")
 	output.writeUInt8(version) // Version
 
@@ -399,6 +412,11 @@ function writeCelariaMap(map, version = 3) {
 }
 
 // TODO: Again, this uses the .ecmap versions (0 - 4)
+/**@todo Yet to be documented.
+ *
+ * @param {any} instanceType
+ * @param {number} version
+ */
 function instanceTypeIsSupported(instanceType, version) {
 	switch (instanceType) {
 		case 3:
@@ -414,5 +432,3 @@ function instanceTypeIsSupported(instanceType, version) {
 
 	return true
 }
-
-module.exports = { parseCelariaMap, writeCelariaMap }

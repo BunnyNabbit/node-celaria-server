@@ -1,22 +1,16 @@
-const EventEmitter = require("events").EventEmitter
-
-const World = require("./class/World.js")
-const Player = require("./class/Player.js")
-const cmapLib = require("./data/cmapLib.js")
-const Recording = require("./class/Recording.js")
-
-const qs = require("qs")
-const axios = require("axios")
-
-const SmartBuffer = require("smart-buffer").SmartBuffer
-const Packet = require("./class/Packet.js")
-
-const tcpPacketHandler = require("./net/tcpPacketHandler.js")
-
-const net = require("net")
-const dgram = require("dgram")
-
-const util = require("./util/index.js")
+import { EventEmitter } from "events"
+import { World } from "./class/World.mjs"
+import { Player } from "./class/Player.mjs"
+import * as cmapLib from "./data/cmapLib.mjs"
+import { Recording } from "./class/Recording.mjs"
+import qs from "qs"
+import axios from "axios"
+import { SmartBuffer } from "smart-buffer"
+import { Packet } from "./class/Packet.mjs"
+import { tcpPacketHandler } from "./net/tcpPacketHandler.mjs"
+import net from "net"
+import dgram from "dgram"
+import { util } from "./util/index.mjs"
 
 function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
@@ -26,7 +20,7 @@ function animationAllowed(animId) {
 	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
 }
 
-class Server extends EventEmitter {
+export class Server extends EventEmitter {
 	/**/
 	constructor(props) {
 		super()
@@ -134,6 +128,8 @@ class Server extends EventEmitter {
 		this.tcpServer = net.createServer((socket) => {
 			// TCP Handler
 			const player = new Player(socket) // This player isn't added to any World until it has been validated
+			/** @deprecated Use {@link Player#} */
+			player.cServer = this
 			player.cServer = this
 			socket.setNoDelay(true)
 			socket.on("error", () => {
@@ -334,6 +330,10 @@ class Server extends EventEmitter {
 	}
 }
 
-const Vector3 = require("./class/Vector3.js")
+export function startServer(props) {
+	const server = new Server(props)
+	server.start()
+	return server
+}
 
-module.exports = Server
+export default Server

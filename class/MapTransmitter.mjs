@@ -1,27 +1,37 @@
-const EventEmitter = require("events").EventEmitter
-const { SmartBuffer } = require("smart-buffer")
-const Packet = require("./Packet.js")
+// @ts-check
+import { EventEmitter } from "events"
+import { SmartBuffer } from "smart-buffer"
+import { Packet } from "./Packet.mjs"
+import { Player } from "./Player.mjs"
 
 const PacketFragmentLength = 4096
 
-class MapTransmitter extends EventEmitter {
-	/**/
+export class MapTransmitter extends EventEmitter {
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Player} player
+	 */
 	constructor(player) {
 		super()
+		/** @type {Player} */
 		this.player = player
+		/** @type {SmartBuffer} */
 		this.mapDataBuffer = new SmartBuffer()
 	}
-
-	setMapData(buff) {
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer} buffer
+	 */
+	setMapData(buffer) {
 		// Set the current map buffer
-		this.mapDataBuffer = SmartBuffer.fromBuffer(buff)
+		this.mapDataBuffer = SmartBuffer.fromBuffer(buffer)
 	}
-
+	/** @todo Yet to be documented. */
 	sendAllPackets() {
 		// Disregard waiting for the client! SEND ALL THA PACKETS!!
 		while (this.sendPacket() == false) {}
 	}
-
+	/** @todo Yet to be documented. */
 	sendPacket() {
 		if (this.mapDataBuffer.remaining() === 0) {
 			// There are no more map fragments to be sent
@@ -43,4 +53,4 @@ class MapTransmitter extends EventEmitter {
 	}
 }
 
-module.exports = MapTransmitter
+export default MapTransmitter

@@ -1,7 +1,7 @@
 // replaced by ReplayBuffer
-const Player = require("./Player.js")
+import { Player } from "./Player.mjs"
 
-class Recording {
+export class Recording {
 	/**/
 	constructor(data) {
 		this.player = null
@@ -81,4 +81,4 @@ class Recording {
 	}
 }
 
-module.exports = Recording
+export default Recording
