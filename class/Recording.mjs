@@ -31,7 +31,7 @@ export class Recording {
 			this.data.username = this.player.username
 		}
 	}
-/** @todo Yet to be documented. */
+	/** @todo Yet to be documented. */
 	startRecordingPlayer() {
 		if (!this.player) throw "Can't start recording without player attached"
 		this.recording = true
@@ -40,13 +40,13 @@ export class Recording {
 		}
 		this.player.on("statusUpdate", this.statusCallback)
 	}
-/** @todo Yet to be documented. */
+	/** @todo Yet to be documented. */
 	stopRecordingPlayer() {
 		if (!this.player) throw "Can't stop recording without player attached"
 		this.recording = false
 		this.player.off("statusUpdate", this.statusCallback)
 	}
-/** @todo Yet to be documented. */
+	/** @todo Yet to be documented. */
 	startPlayback(world) {
 		const bot = new Player(null)
 		bot.username = this.data.username
@@ -70,11 +70,11 @@ export class Recording {
 
 		return bot
 	}
-/** @todo Yet to be documented. */
+	/** @todo Yet to be documented. */
 	stopPlayback() {
 		throw "nope"
 	}
-/** @todo Yet to be documented. */
+	/** @todo Yet to be documented. */
 	addTic(status) {
 		status.time = new Date() - 0
 		this.data.replay.push(status)
