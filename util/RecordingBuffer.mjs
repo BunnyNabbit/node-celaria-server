@@ -3,9 +3,7 @@ import { SmartBuffer } from "smart-buffer"
 import util from "./index.mjs"
 /** @import {World} from "../class/World.mjs" */
 
-/**
- * @param {number} ms
- */
+/** @param {number} ms */
 function sleep(ms) {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms)
@@ -13,6 +11,7 @@ function sleep(ms) {
 }
 
 export class Recording {
+	/**/
 	constructor(data) {
 		this.player = null
 		this.recording = false
@@ -76,6 +75,7 @@ export class Recording {
 	}
 
 	/**@todo Yet to be documented.
+	 *
 	 * @param {World} world
 	 */
 	startPlayback(world) {
@@ -154,7 +154,8 @@ export class Recording {
 		return status
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ updateNumber: number; respawnNumber: number; x: number; y: number; z: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number; }} status
+	 *
+	 * @param {{ updateNumber: number; respawnNumber: number; x: number; y: number; z: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number }} status
 	 */
 	addTic(status) {
 		this.data.writeFloatLE(-(this.lastStatus - new Date()))

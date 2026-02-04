@@ -1,6 +1,7 @@
 // @ts-check
 import { SmartBuffer } from "smart-buffer"
 /**@todo Yet to be documented.
+ *
  * @param {number} float
  */
 export function compressFloat(float) {

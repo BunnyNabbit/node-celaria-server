@@ -10,7 +10,8 @@ export class Vector3 {
 		this.z = z
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ x: number; y: number; z: number; }} vector
+	 *
+	 * @param {{ x: number; y: number; z: number }} vector
 	 */
 	fromVector(vector) {
 		this.x = vector.x
@@ -19,13 +20,15 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ x: number; y: number; z: number; }} vector
+	 *
+	 * @param {{ x: number; y: number; z: number }} vector
 	 */
 	equalsVector(vector) {
 		if (this.x === vector.x && this.y === vector.y && this.z === vector.z) return true
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ x: number; y: number; z: number; }} vector
+	 *
+	 * @param {{ x: number; y: number; z: number }} vector
 	 */
 	addVector(vector) {
 		this.x += vector.x
@@ -34,6 +37,7 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} z
@@ -45,7 +49,8 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ x: number; y: number; z: number; }} vector
+	 *
+	 * @param {{ x: number; y: number; z: number }} vector
 	 */
 	subVector(vector) {
 		this.x -= vector.x
@@ -54,6 +59,7 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} z
@@ -65,7 +71,8 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
-	 * @param {{ x: number; y: number; z: number; }} vector
+	 *
+	 * @param {{ x: number; y: number; z: number }} vector
 	 */
 	multiplyVector(vector) {
 		this.x *= vector.x
@@ -74,6 +81,7 @@ export class Vector3 {
 		return this
 	}
 	/**@todo Yet to be documented.
+	 *
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} z
