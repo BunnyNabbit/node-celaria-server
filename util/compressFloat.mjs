@@ -1,6 +1,9 @@
+// @ts-check
 import { SmartBuffer } from "smart-buffer"
-
-export function compressFloat(float: number) {
+/**@todo Yet to be documented.
+ * @param {number} float
+ */
+export function compressFloat(float) {
 	float = float * 10
 	let divide = float / 65535.0
 	let bytes = Math.floor(divide)

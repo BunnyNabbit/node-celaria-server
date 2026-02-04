@@ -1,46 +1,26 @@
 import { EventEmitter } from "events"
-import { World } from "./class/World.mts"
-import { Player } from "./class/Player.mts"
-import * as cmapLib from "./data/cmapLib.mts"
-import { Recording } from "./class/Recording.mts"
+import { World } from "./class/World.mjs"
+import { Player } from "./class/Player.mjs"
+import * as cmapLib from "./data/cmapLib.mjs"
+import { Recording } from "./class/Recording.mjs"
 import qs from "qs"
 import axios from "axios"
 import { SmartBuffer } from "smart-buffer"
-import { Packet } from "./class/Packet.mts"
-import { tcpPacketHandler } from "./net/tcpPacketHandler.mts"
+import { Packet } from "./class/Packet.mjs"
+import { tcpPacketHandler } from "./net/tcpPacketHandler.mjs"
 import net from "net"
 import dgram from "dgram"
-import { util } from "./util/index.mts"
+import { util } from "./util/index.mjs"
 
-function randomIntFromInterval(min: number, max: number) {
+function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-function animationAllowed(animId: number) {
+function animationAllowed(animId) {
 	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
 }
 
 export class Server extends EventEmitter {
-	worlds: World[]
-	defaultWorld: any
-	commands: any[]
-	maxPlayers: any
-	players: any[]
-	jail: any[]
-	tarpitEnabled: any
-	tarpit: any[]
-	tcpServer: net.Server
-	udpServer: dgram.Socket
-	port: any
-	name: any
-	MOTD: { message: string[]; color: string }
-	sendError: boolean
-	statusSendRatelimit: any
-	mapCollection: any
-	useDefault: any
-	postToMasterServer: boolean
-	functions: any
-	_processExit: () => Promise<never>
 	/**/
 	constructor(props) {
 		super()
@@ -183,7 +163,7 @@ export class Server extends EventEmitter {
 				player.udpPort = rinfo.port
 				switch (packetId) {
 					case 1: // Player state data (positions, animations, etc)
-						const status: any = {}
+						const status = {}
 						status.updateNumber = buff.readUInt8()
 						status.respawnNumber = buff.readUInt8()
 
@@ -254,7 +234,6 @@ export class Server extends EventEmitter {
 								// Note: In this server, all statuses are sent in their own separate packet. No status updates are ever bundled together in one packet.
 								// This could mean that responses will be faster but may take up more bandwidth due to the packet overheads.
 								// Doing it this way also helps when programming with the functions, as you control when packets are sent.
-								// @ts-ignore
 								if (-(player.lastStatusSend - new Date()) > this.statusSendRatelimit) {
 									// precaution
 									player.lastStatusSend = new Date()
@@ -351,7 +330,7 @@ export class Server extends EventEmitter {
 	}
 }
 
-export function startServer(props: any) {
+export function startServer(props) {
 	const server = new Server(props)
 	server.start()
 	return server

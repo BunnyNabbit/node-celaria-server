@@ -1,16 +1,17 @@
+// @ts-check
 import { EventEmitter } from "events"
 
 export class Timer extends EventEmitter {
-	timeStart: number
-	timeEnd: number
-	active: boolean
-	timeout?: NodeJS.Timeout
 	/**/
 	constructor() {
 		super()
+		/** @type {number} */
 		this.timeStart = Date.now()
+		/** @type {number} */
 		this.timeEnd = Date.now()
+		/** @type {boolean} */
 		this.active = false
+		/** @type {NodeJS.Timeout?} */
 		this.timeout = null
 	}
 
@@ -33,14 +34,20 @@ export class Timer extends EventEmitter {
 		this.active = false
 		clearTimeout(this.timeout)
 	}
-
-	extend(ms: number) {
+	/**@todo Yet to be documented.
+	 *
+	 * @param {number} ms
+	 */
+	extend(ms) {
 		this.timeEnd += ms
 		this.update()
 		this.emit("extend", ms)
 	}
-
-	set(timeEnd: number) {
+	/**@todo Yet to be documented.
+	 *
+	 * @param {number} timeEnd
+	 */
+	set(timeEnd) {
 		this.timeStart = Date.now()
 		this.timeEnd = this.timeStart + timeEnd
 		this.update()

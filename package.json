@@ -2,9 +2,10 @@
 	"name": "node-celaria-server",
 	"version": "0.0.4",
 	"description": "A Celaria game server",
-	"main": "index.mts",
+	"main": "index.mjs",
+	"type": "module",
 	"scripts": {
-		"test": "jest",
+		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
 		"build-docs": "typedoc",
 		"type-check": "tsc"
 	},
@@ -22,6 +23,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "24.1.0",
+		"cross-env": "^10.1.0",
 		"jest": "^30.2.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-drone-class": "^0.1.0",

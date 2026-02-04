@@ -1,18 +1,18 @@
+// @ts-check
 import { EventEmitter } from "events"
-import { Vector3 } from "./Vector3.mts"
-import { Packet } from "./Packet.mts"
-import { util } from "../util/index.mts"
-import * as cmapLib from "../data/cmapLib.mts"
-import { Timer } from "./Timer.mts"
+import { Vector3 } from "./Vector3.mjs"
+import { Packet } from "./Packet.mjs"
+import { util } from "../util/index.mjs"
+import * as cmapLib from "../data/cmapLib.mjs"
+import { Timer } from "./Timer.mjs"
+/** @import {Player} from "./Player.mjs" */
+/** @import {Server} from "../Server.mjs" */
 
 export class World extends EventEmitter {
-	server: any
-	players: any[]
-	mapBuffer: Buffer<ArrayBufferLike>
-	map: import("../data/cmapLib.mts").CelariaMap
-	leaderboard: any[]
-	timer: Timer
-	/**/
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Server} server
+	 */
 	constructor(server) {
 		super()
 		this.server = server
@@ -29,7 +29,12 @@ export class World extends EventEmitter {
 			this.broadcast(timeExtendPacket.transformPacket())
 		})
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Player} player
+	 * @param {number} time
+	 * @param {number} medal
+	 */
 	updateLeaderboardEntry(player, time, medal) {
 		if (!player.socket) return
 		const newEntry = { player, time, medal }
@@ -43,6 +48,7 @@ export class World extends EventEmitter {
 		} else {
 			this.leaderboard.push(newEntry)
 		}
+		/** @param {number} time */
 		function fx(time) {
 			// yep, this is how to sort those entries with no times
 			if (time == 0) return Infinity
@@ -50,7 +56,10 @@ export class World extends EventEmitter {
 		}
 		this.leaderboard.sort((a, b) => fx(a.time) - fx(b.time))
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer<ArrayBufferLike>} mapBuffer
+	 */
 	switchMap(mapBuffer) {
 		this.mapBuffer = mapBuffer
 		this.players.forEach((player) => {
@@ -58,12 +67,19 @@ export class World extends EventEmitter {
 		})
 	}
 
+	/**@todo Yet to be documented.
+	 *
+	 * @param {string} message
+	 */
 	messageAll(message, color = "#ffffff") {
 		this.players.forEach((player) => {
 			if (player.socket) player.message(message, color)
 		})
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Player} player
+	 */
 	removePlayer(player) {
 		const playerIndex = this.players.indexOf(player)
 		if (playerIndex !== -1) this.players.splice(playerIndex, 1)
@@ -75,7 +91,10 @@ export class World extends EventEmitter {
 		offlinePacket.writeUInt8(player.netId)
 		this.broadcast(offlinePacket.transformPacket("TCP"))
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Player} player
+	 */
 	addPlayer(player) {
 		player.world = this
 		if (player.socket) {
@@ -88,14 +107,22 @@ export class World extends EventEmitter {
 		this.players.push(player)
 		this.updateLeaderboardEntry(player, 0, 0)
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer<ArrayBufferLike>} buffer
+	 */
 	broadcast(buffer) {
 		// TODO: Needs to implement UDP
 		this.players.forEach((player) => {
 			if (player.socket) player.socket.write(buffer)
 		})
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer<ArrayBufferLike>} buffer
+	 * @param {string | any[]} players
+	 * @param {string} protocol
+	 */
 	broadcastExcept(buffer, players, protocol) {
 		this.players.forEach((player) => {
 			if (players.includes(player) === false) {

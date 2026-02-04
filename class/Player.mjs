@@ -1,35 +1,16 @@
+// @ts-check
 import { EventEmitter } from "events"
-import { Packet } from "./Packet.mts"
-import { MapTransmitter } from "./MapTransmitter.mts"
-import { util } from "../util/index.mts"
+import { Packet } from "./Packet.mjs"
+import { MapTransmitter } from "./MapTransmitter.mjs"
+import { util } from "../util/index.mjs"
+/** @import {World} from "./World.mjs" */
+/** @import {Server} from "../Server.mjs" */
 
 export class Player extends EventEmitter {
-	cServer: import("../Server.mts").Server
-	world: any
-	socket: any
-	netId: number
-	udpKey: number
-	udpReady: boolean
-	udpPort?: number
-	lastUpdateNumber: number
-	mapSent: boolean
-	muted: boolean
-	chatColor: string
-	destroyed: boolean
-	ready: boolean
-	guest: boolean
-	username: string
-	steamId: string
-	avatar: { character: number; colors: { visor: string; armor: string; skin: string } }
-	profile: { experience: number; badgeId: number }
-	animationLocked: boolean
-	positionLocked: boolean
-	alive: boolean
-	rawStatus: { updateNumber: number; respawnNumber: number; x: number; y: number; z: number; nx: number; ny: number; nz: number; nLen: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number }
-	lastStatusSend: Date
-	mapTransmitter: MapTransmitter
-	_chatCooldown?: true
-	/**/
+	/**@todo Yet to be documented.
+	 *
+	 * @param {any} socket
+	 */
 	constructor(socket) {
 		super()
 		this.socket = socket // null means player is fake/bot and shouldn't be sent packets to or count towards the server list.
@@ -44,6 +25,7 @@ export class Player extends EventEmitter {
 		this.chatColor = "#ffffff"
 
 		this.destroyed = false
+		/** @type {World | null} */
 		this.world = null
 		this.ready = false
 
@@ -95,6 +77,8 @@ export class Player extends EventEmitter {
 		}
 
 		this.lastStatusSend = new Date()
+		/** @type {Server | null} */
+		this.cServer
 	}
 
 	refresh() {
@@ -105,7 +89,10 @@ export class Player extends EventEmitter {
 		const roundEndBuff = new Packet(184) // ROUND_END
 		this.socket.write(roundEndBuff.transformPacket("TCP"))
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {Buffer} mapBuffer
+	 */
 	loadMap(mapBuffer, gamemode = 1, timer = this.world.timer) {
 		// Oh. This apparently doesn't work well right now, Celaria really expects rounds to not end right after maps are about to change.
 		// pls fix
@@ -268,7 +255,10 @@ export class Player extends EventEmitter {
 		}
 		if (this.socket && !this.socket.destroyed) this.socket.destroy()
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {string} reason
+	 */
 	kick(reason, kickReasonID = 0) {
 		// Kick the player and destroy their socket
 		if (this.destroyed) return
@@ -286,7 +276,10 @@ export class Player extends EventEmitter {
 
 		this.destroy()
 	}
-
+	/**@todo Yet to be documented.
+	 *
+	 * @param {string} message
+	 */
 	message(message, color = "#ffffff") {
 		if (this.destroyed) return
 		if (!this.socket) return

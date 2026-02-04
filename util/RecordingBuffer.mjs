@@ -1,23 +1,18 @@
-import { Player } from "../class/Player.mts"
+import { Player } from "../class/Player.mjs"
 import { SmartBuffer } from "smart-buffer"
-import util from "./index.mts"
+import util from "./index.mjs"
+/** @import {World} from "../class/World.mjs" */
 
-function sleep(ms: number) {
+/**
+ * @param {number} ms
+ */
+function sleep(ms) {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms)
 	})
 }
 
 export class Recording {
-	player: Player
-	recording: boolean
-	autoAddTics: boolean
-	playback: boolean
-	playbackBot?: Player
-	statusCallback?: (status: any) => void
-	lastStatus: Date
-	data: SmartBuffer
-	/**/
 	constructor(data) {
 		this.player = null
 		this.recording = false
@@ -60,7 +55,6 @@ export class Recording {
 			this.data.writeUInt8(visor[2])
 
 			// Start time
-			// @ts-ignore
 			this.data.writeDoubleLE(new Date() - 0)
 		}
 	}
@@ -68,7 +62,7 @@ export class Recording {
 	startRecordingPlayer() {
 		if (!this.player) throw "Can't start recording without player attached"
 		this.recording = true
-		this.statusCallback = (status) => {
+		this.statusCallback = (/** @type {any} */ status) => {
 			if (this.autoAddTics) this.addTic(status)
 		}
 		this.player.on("statusUpdate", this.statusCallback)
@@ -81,6 +75,9 @@ export class Recording {
 		return this.data.toBuffer()
 	}
 
+	/**@todo Yet to be documented.
+	 * @param {World} world
+	 */
 	startPlayback(world) {
 		this.data.readOffset = 0
 		const bot = new Player(null)
@@ -118,15 +115,14 @@ export class Recording {
 			}
 		})
 		// TODO: what
-		// @ts-ignore
 		playbackFinished.bot = bot
 
 		return playbackFinished
 	}
 
-	async readTic(handleDelay: boolean, bot: Player) {
+	async readTic(handleDelay, bot) {
 		const delay = this.data.readFloatLE()
-		const status: any = {}
+		const status = {}
 		status.updateNumber = this.data.readUInt8()
 		status.respawnNumber = this.data.readUInt8()
 
@@ -157,9 +153,10 @@ export class Recording {
 		}
 		return status
 	}
-
+	/**@todo Yet to be documented.
+	 * @param {{ updateNumber: number; respawnNumber: number; x: number; y: number; z: number; movX: number; movY: number; movZ: number; rotationZ: number; animationID: number; animationStep: number; }} status
+	 */
 	addTic(status) {
-		// @ts-ignore
 		this.data.writeFloatLE(-(this.lastStatus - new Date()))
 		this.lastStatus = new Date()
 

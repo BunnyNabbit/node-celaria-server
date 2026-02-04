@@ -1,25 +1,15 @@
+// @ts-check
 import { SmartBuffer } from "smart-buffer"
+/** @import {CelariaMap} from "./types.mjs" */
 
-export interface CelariaMap {
-	version?: number
-	map?: string
-	name?: string
-	mode?: number
-	medalTimes?: any // TODO
-	sunRotationHorizontal?: number
-	sunRotationVertical?: number
-	previewCamFromX?: number
-	previewCamFromY?: number
-	previewCamFromZ?: number
-	previewCamToX?: number
-	previewCamToY?: number
-	previewCamToZ?: number
-	instances?: any[] // TODO: reconsider how objects are inserted into zhis array
-	[key: string]: any
-}
-
-export function parseCelariaMap(buffer: Buffer) {
-	const map: CelariaMap = {}
+/**@todo Yet to be documented.
+ *
+ * @param {Buffer} buffer
+ * @returns
+ */
+export function parseCelariaMap(buffer) {
+	/** @type {CelariaMap} */
+	const map = {}
 	const smartBuffer = SmartBuffer.fromBuffer(buffer)
 	const magic = smartBuffer.readString(11)
 	if (magic === "celaria_map") {
@@ -60,7 +50,7 @@ export function parseCelariaMap(buffer: Buffer) {
 		map.instances = []
 
 		for (let i = 0; i < instanceCount; i++) {
-			const instance: any = {
+			const instance = {
 				instanceType: smartBuffer.readUInt8(),
 			}
 			switch (instance.instanceType) {
@@ -254,7 +244,11 @@ export function parseCelariaMap(buffer: Buffer) {
 }
 
 // TODO: Many of the map data to write should be optional and have default values for everything to "just work" if the map alone has no checkpoint data, sun or name and just the map blocks.
-export function writeCelariaMap(map: CelariaMap, version = 3) {
+/**@todo Yet to be documented.
+ *
+ * @param {CelariaMap} map
+ */
+export function writeCelariaMap(map, version = 3) {
 	// this can modify the original object
 	if (!map.instances)
 		map.instances = [
@@ -418,7 +412,12 @@ export function writeCelariaMap(map: CelariaMap, version = 3) {
 }
 
 // TODO: Again, this uses the .ecmap versions (0 - 4)
-function instanceTypeIsSupported(instanceType: number, version: number) {
+/**@todo Yet to be documented.
+ *
+ * @param {any} instanceType
+ * @param {number} version
+ */
+function instanceTypeIsSupported(instanceType, version) {
 	switch (instanceType) {
 		case 3:
 			if (version < 3) return false

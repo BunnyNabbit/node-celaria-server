@@ -1,11 +1,7 @@
 // replaced by ReplayBuffer
-import { Player } from "./Player.mts"
+import { Player } from "./Player.mjs"
 
 export class Recording {
-	player: Player
-	recording: boolean
-	statusCallback?: (status: number) => void
-	data: { dataVersion: number; username: string; avatar: { character: number; colors: { visor: string; armor: string; skin: string } }; startTime: number; replay: any[] }
 	/**/
 	constructor(data) {
 		this.player = null
@@ -22,7 +18,6 @@ export class Recording {
 					skin: "#c0c0c0",
 				},
 			},
-			// @ts-ignore
 			startTime: new Date() - 0,
 			replay: [],
 		}
@@ -81,7 +76,6 @@ export class Recording {
 	}
 
 	addTic(status) {
-		// @ts-ignore
 		status.time = new Date() - 0
 		this.data.replay.push(status)
 	}

@@ -1,15 +1,18 @@
+// @ts-check
 import { SmartBuffer } from "smart-buffer"
 /** I am a {@link SmartBuffer} wrapper for Celaria packet headers. */
 export class Packet extends SmartBuffer {
-	packetType: number
-	protocol: string
-	/** @todo TypeScript fields for {@link protocol} */
-	constructor(packetType: number, protocol?: string) {
+	/**@todo TypeScript fields for {@link protocol}
+	 *
+	 * @param {number} packetType
+	 * @param {string | null} [protocol]
+	 */
+	constructor(packetType, protocol) {
 		super()
 		this.packetType = packetType
 		this.protocol = protocol
 	}
-
+	/** @todo Yet to be documented. */
 	transformPacket(protocol = this.protocol) {
 		let length = this.length
 		const packetBuffer = new SmartBuffer()

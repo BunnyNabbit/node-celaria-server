@@ -24,11 +24,11 @@
 		"erasableSyntaxOnly": true,
 	},
 	"include": [
-		"index.mts"
+		"index.mjs"
 	],
 	"typedocOptions": {
 		"entryPoints": [
-			"index.mts"
+			"index.mjs"
 		],
 		"jsDocCompatibility": {
 			"exampleTag": true,

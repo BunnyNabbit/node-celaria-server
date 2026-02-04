@@ -8,6 +8,8 @@ export const config = {
 	coverageDirectory: "coverage",
 	// Indicates which provider should be used to instrument code for coverage
 	coverageProvider: "v8",
+	// A map from regular expressions to paths to transformers
+	transform: {},
 }
 
 export default config

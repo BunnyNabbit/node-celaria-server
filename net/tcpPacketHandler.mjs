@@ -1,17 +1,25 @@
 import { SmartBuffer } from "smart-buffer"
-import { Packet } from "../class/Packet.mts"
-import { rgbToHex } from "../util/color.mts"
-import { constants } from "../data/constants.mts"
+import { Packet } from "../class/Packet.mjs"
+import { rgbToHex } from "../util/color.mjs"
+import { constants } from "../data/constants.mjs"
 import { Socket } from "node:net"
-import { Player } from "../class/Player.mts"
-
-function characterAllowed(characterId: number) {
+import { Player } from "../class/Player.mjs"
+/**@todo Yet to be documented.
+ *
+ * @param {number} characterId
+ */
+function characterAllowed(characterId) {
 	return constants.validCharactersIds.includes(characterId)
 }
-
-export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBuffer) {
+/**@todo Yet to be documented.
+ *
+ * @param {Socket} socket
+ * @param {Player} player
+ * @param {SmartBuffer} buffer
+ */
+export function tcpPacketHandler(socket, player, buffer) {
 	try {
-		if (buffer.readString(4) !== "CCPT") return player.kick("Wrong TCP packet header#This shouldn't happen to users connecting to this server with Celaria, if it did then please report this to BunnyNabbit.", 9)
+		if (buffer.readString(4) !== "CCPT") return player.kick("Wrong TCP packet header#This shouldn't happen to users connecting to this server with Celaria, if it did then please report this to BunnyNabbit.mjs", 9)
 		const packetId = buffer.readUInt8()
 		const packetSize = buffer.readUInt16LE()
 		switch (packetId) {
@@ -71,7 +79,7 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 				const MOTD = player.cServer.MOTD
 				if (MOTD.message) {
 					if (Array.isArray(MOTD.message)) {
-						MOTD.message.forEach((message) => {
+						MOTD.message.forEach((/** @type {any} */ message) => {
 							player.message(message, MOTD.color)
 						})
 					} else {
@@ -105,12 +113,15 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 					leaderboardBuffer.writeUInt8(type) // Type of leaderboard (post-game or in-game)
 					leaderboardBuffer.writeUInt8(player.world.leaderboard.length)
 					// Does the leaderboard contain the player's own entry?
-					const ownEntry = player.world.leaderboard.find((entry) => entry.player === player)
+					const ownEntry = player.world.leaderboard.find((/** @type {{ player: Player }} */ entry) => entry.player === player)
 					const containsOwnEntry = Number(Boolean(ownEntry))
 					leaderboardBuffer.writeUInt8(entriesInView.length + containsOwnEntry) // Number of entries found in the current view
 					leaderboardBuffer.writeUInt8(containsOwnEntry)
 					let newPlace = 0
-					function writeEntry(entry, placement?) {
+					/**@param {{ player: Player; time: number; medal: number }} entry
+					 * @param {number} [placement]
+					 */
+					function writeEntry(entry, placement) {
 						newPlace++
 						if (!placement) placement = newPlace
 						leaderboardBuffer.writeUInt8(placement)
@@ -129,10 +140,10 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 							leaderboardBuffer.writeUInt8(0)
 						}
 					}
-					entriesInView.forEach((entry) => {
+					entriesInView.forEach((/** @type {any} */ entry) => {
 						writeEntry(entry)
 					})
-					if (containsOwnEntry) writeEntry(ownEntry, player.world.leaderboard.findIndex((entry) => entry.player === player) + 1)
+					if (containsOwnEntry) writeEntry(ownEntry, player.world.leaderboard.findIndex((/** @type {{ player: Player }} */ entry) => entry.player === player) + 1)
 					socket.write(leaderboardBuffer.transformPacket())
 				}
 				break
@@ -145,7 +156,7 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 				const words = message.split(" ")
 				const firstWord = words[0]
 				let commandIssued = false
-				player.cServer.commands.forEach((cmd) => {
+				player.cServer.commands.forEach((/** @type {{ name: string | any[]; callback: (arg0: any, arg1: any) => void }} */ cmd) => {
 					if (Array.isArray(cmd.name)) {
 						if (cmd.name.includes(firstWord)) {
 							cmd.callback(player, words.slice(1, words.length).join(""))
@@ -169,7 +180,7 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 					player._chatCooldown = null
 				}, 2000)
 
-				const showId = player.cServer.players.some((other) => other !== player && other.username === player.username)
+				const showId = player.cServer.players.some((/** @type {{ username: any }} */ other) => other !== player && other.username === player.username)
 				// const showId = player.cServer.players.some(other => other.socket && other !== player && other.username === player.username)
 				if (message.length) {
 					let adornments = ""
@@ -222,8 +233,12 @@ export function tcpPacketHandler(socket: Socket, player: Player, buffer: SmartBu
 		}
 	}
 }
-
-function randomIntFromInterval(min: number, max: number) {
+/**@todo Yet to be documented.
+ *
+ * @param {number} min
+ * @param {number} max
+ */
+function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
