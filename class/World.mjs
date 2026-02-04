@@ -7,7 +7,7 @@ import * as cmapLib from "../data/cmapLib.mjs"
 import { Timer } from "./Timer.mjs"
 /** @import {Player} from "./Player.mjs" */
 /** @import {Server} from "../Server.mjs" */
-
+/** @todo Yet to be documented. */
 export class World extends EventEmitter {
 	/**@todo Yet to be documented.
 	 *
@@ -66,7 +66,6 @@ export class World extends EventEmitter {
 			if (player.socket) player.loadMap(mapBuffer, 1)
 		})
 	}
-
 	/**@todo Yet to be documented.
 	 *
 	 * @param {string} message

@@ -5,7 +5,7 @@ import { MapTransmitter } from "./MapTransmitter.mjs"
 import { util } from "../util/index.mjs"
 /** @import {World} from "./World.mjs" */
 /** @import {Server} from "../Server.mjs" */
-
+/** @todo Yet to be documented. */
 export class Player extends EventEmitter {
 	/**@todo Yet to be documented.
 	 *
@@ -80,11 +80,11 @@ export class Player extends EventEmitter {
 		/** @type {Server | null} */
 		this.cServer
 	}
-
+	/** @todo Yet to be documented. */
 	refresh() {
 		// "Refresh" the player to all other connected clients to receive changes by faking disconnections and reconnections. This is mainly used to change player or bot ego
 	}
-
+	/** @todo Yet to be documented. */
 	roundEnd() {
 		const roundEndBuff = new Packet(184) // ROUND_END
 		this.socket.write(roundEndBuff.transformPacket("TCP"))
@@ -117,7 +117,7 @@ export class Player extends EventEmitter {
 		startGameBuff.writeUInt32LE(timer.timeLeft / 10) // Number of tics until round ends. The Celaria client ticks 100 times a second.
 		this.socket.write(startGameBuff.transformPacket("TCP"))
 	}
-
+	/** @todo Yet to be documented. */
 	playerCreatePacket() {
 		// This is a test
 		const playerCreateBuff = new Packet(10) // PLAYER_INFO
@@ -156,7 +156,7 @@ export class Player extends EventEmitter {
 
 		return playerCreateBuff.transformPacket("TCP")
 	}
-
+	/** @todo Yet to be documented. */
 	updateStateForOthers() {
 		const statusUpdatePacket = new Packet(1)
 		// segment (and only segment btw since this server doesn't batch up statuses)
@@ -200,8 +200,8 @@ export class Player extends EventEmitter {
 		// Broadcast packet into world
 		this.world.broadcastExcept(statusUpdatePacket.transformPacket("UDP"), [this], "UDP")
 	}
-
 	// Status update meant to be only called by scripting
+	/** @todo Yet to be documented. */
 	fakeUpdateStatus() {
 		const statusUpdatePacket = new Packet(1)
 		// segment (and only segment btw)
@@ -247,7 +247,7 @@ export class Player extends EventEmitter {
 		// Broadcast packet into world
 		this.world.broadcastExcept(statusUpdatePacket.transformPacket("UDP"), [this], "UDP")
 	}
-
+	/** @todo Yet to be documented. */
 	destroy() {
 		this.destroyed = true
 		if (this.cServer) {

@@ -1,6 +1,6 @@
 // @ts-check
 import { EventEmitter } from "events"
-
+/** @todo Yet to be documented. */
 export class Timer extends EventEmitter {
 	/**/
 	constructor() {
@@ -14,12 +14,12 @@ export class Timer extends EventEmitter {
 		/** @type {NodeJS.Timeout?} */
 		this.timeout = null
 	}
-
+	/** @todo Yet to be documented. */
 	get timeLeft() {
 		if (!this.active) return 0
 		return Math.max(this.timeEnd - Date.now(), 0)
 	}
-
+	/** @todo Yet to be documented. */
 	update() {
 		this.clear()
 		this.active = true
@@ -29,7 +29,7 @@ export class Timer extends EventEmitter {
 		}, this.timeLeft)
 		this.emit("update")
 	}
-
+	/** @todo Yet to be documented. */
 	clear() {
 		this.active = false
 		clearTimeout(this.timeout)

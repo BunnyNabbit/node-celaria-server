@@ -11,15 +11,15 @@ import { tcpPacketHandler } from "./net/tcpPacketHandler.mjs"
 import net from "net"
 import dgram from "dgram"
 import { util } from "./util/index.mjs"
-
+/** @todo Yet to be documented. */
 function randomIntFromInterval(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min)
 }
-
+/** @todo Yet to be documented. */
 function animationAllowed(animId) {
 	return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 25].includes(animId)
 }
-
+/** @todo Yet to be documented. */
 export class Server extends EventEmitter {
 	/**/
 	constructor(props) {
@@ -57,46 +57,43 @@ export class Server extends EventEmitter {
 				util,
 			}
 	}
-
-	// Send a message to all players in the server
-
-	// Send a message to all players in the server
+	/** Send a message to all players in the server. */
 	messageAll(message, color = "#ffffff") {
 		this.players.forEach((player) => {
 			if (player.socket) player.message(message, color)
 		})
 	}
-
+	/** @todo Yet to be documented. */
 	getPlayerKey() {
 		let key = randomIntFromInterval(0, 65535)
 		if (this.players.some((player) => player.udpKey == key) == false) return key
 		return this.getPlayerKey()
 	}
-
+	/** @todo Yet to be documented. */
 	getPlayerId() {
 		for (let i = 0; i < 256; i++) {
 			if (!this.players.some((player) => player.netId == i)) return i
 		}
 		throw "Unable to generate unique player ID"
 	}
-
+	/** @todo Yet to be documented. */
 	getRealPlayers() {
 		return this.players.filter((player) => player.socket)
 	}
-
+	/** @todo Yet to be documented. */
 	newPlayer(player) {
 		player.cServer = this
 		player.netId = this.getPlayerId()
 		player.udpKey = this.getPlayerKey()
 		this.players.push(player)
 	}
-
+	/** @todo Yet to be documented. */
 	removePlayer(player) {
 		const playerIndex = this.players.indexOf(player)
 		if (playerIndex !== -1) this.players.splice(playerIndex, 1)
 		if (player.world) player.world.removePlayer(player)
 	}
-
+	/** @todo Yet to be documented. */
 	command(name, callback) {
 		const cmd = { name, callback }
 		function remove() {
@@ -105,7 +102,7 @@ export class Server extends EventEmitter {
 		this.commands.push(cmd)
 		return remove
 	}
-
+	/** @todo Yet to be documented. */
 	_postServer() {
 		const apiVersion = 1
 
@@ -123,7 +120,7 @@ export class Server extends EventEmitter {
 		const API = `https://serverapi.celaria.com/${apiVersion}/register.php`
 		axios.post(API, qs.stringify(form)).catch(() => {})
 	}
-
+	/** @todo Yet to be documented. */
 	start() {
 		this.tcpServer = net.createServer((socket) => {
 			// TCP Handler
@@ -324,12 +321,12 @@ export class Server extends EventEmitter {
 		process.once("SIGINT", this._processExit)
 		process.once("SIGTERM", this._processExit)
 	}
-
+	/** @todo Yet to be documented. */
 	shutdown() {
 		this._processExit()
 	}
 }
-
+/** @todo Yet to be documented. */
 export function startServer(props) {
 	const server = new Server(props)
 	server.start()

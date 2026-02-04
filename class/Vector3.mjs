@@ -1,6 +1,6 @@
 // @ts-check
 /** @import {PlainVector3} from "../data/types.mts" */
-
+/** @todo Yet to be documented. */
 export class Vector3 {
 	/**/
 	constructor(x = 0, y = 0, z = 0) {

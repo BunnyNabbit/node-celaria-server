@@ -5,7 +5,7 @@ import { Packet } from "./Packet.mjs"
 import { Player } from "./Player.mjs"
 
 const PacketFragmentLength = 4096
-
+/** @todo Yet to be documented. */
 export class MapTransmitter extends EventEmitter {
 	/**@todo Yet to be documented.
 	 *
