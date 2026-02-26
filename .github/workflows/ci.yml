@@ -31,3 +31,5 @@ jobs:
         run: pnpm run type-check
       - name: Coveralls
         uses: coverallsapp/github-action@v2
+        with:
+          fail-on-error: false
