@@ -29,13 +29,13 @@ importers:
         version: 30.3.0(@types/node@24.12.2)
       prettier:
         specifier: ^3.8.1
-        version: 3.8.1
+        version: 3.8.3
       prettier-plugin-drone-class:
         specifier: ^0.1.0
         version: 0.1.0
       prettier-plugin-drone-jsdoc:
         specifier: ^1.8.0
-        version: 1.8.0(prettier@3.8.1)
+        version: 1.8.0(prettier@3.8.3)
       release-it:
         specifier: ^19.2.4
         version: 19.2.4(@types/node@24.12.2)
@@ -2184,8 +2184,8 @@ packages:
     peerDependencies:
       prettier: ^3.0.0
 
-  prettier@3.8.1:
-    resolution: {integrity: sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==}
+  prettier@3.8.3:
+    resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5077,20 +5077,20 @@ snapshots:
       '@babel/generator': 7.29.1
       '@babel/parser': 7.29.0
       '@babel/traverse': 7.29.0
-      prettier: 3.8.1
+      prettier: 3.8.3
     transitivePeerDependencies:
       - supports-color
 
-  prettier-plugin-drone-jsdoc@1.8.0(prettier@3.8.1):
+  prettier-plugin-drone-jsdoc@1.8.0(prettier@3.8.3):
     dependencies:
       binary-searching: 2.0.5
       comment-parser: 1.4.5
       mdast-util-from-markdown: 2.0.2
-      prettier: 3.8.1
+      prettier: 3.8.3
     transitivePeerDependencies:
       - supports-color
 
-  prettier@3.8.1: {}
+  prettier@3.8.3: {}
 
   pretty-format@30.3.0:
     dependencies:
